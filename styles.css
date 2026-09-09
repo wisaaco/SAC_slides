@@ -1,0 +1,21 @@
+:root {
+  --sd-accent: #1d5c63;
+  --sd-accent-soft: #e8f4f3;
+}
+
+.sidebar-title,
+.navbar-title {
+  font-weight: 700;
+}
+
+h1, h2, h3 {
+  color: var(--sd-accent);
+}
+
+.callout {
+  border-left-color: var(--sd-accent);
+}
+
+.quarto-title-block .quarto-title-banner {
+  background: linear-gradient(135deg, var(--sd-accent-soft), #ffffff);
+}
