@@ -1,0 +1,21 @@
+services:
+  servidor-web:
+    image: nginx:alpine
+    container_name: mi_nginx
+    ports:
+      - "8080:80"
+    networks:
+      - net-benchmark
+
+  benchmark:
+    image: img-wrk
+    container_name: mi_wrk
+    entrypoint: ["tail", "-f", "/dev/null"]
+    networks:
+      - net-benchmark
+    depends_on:
+      - servidor-web
+
+networks:
+  net-benchmark:
+    driver: bridge
