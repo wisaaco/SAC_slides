@@ -1,0 +1,311 @@
+:root {
+  --r-heading-color: #0065BD;
+  --r-link-color: #0091bd;
+  --r-link-color-hover: #143f44;
+  --r-selection-background-color: #d5ebe8;
+  --slide-inline-padding: clamp(0.45em, 1.4vw, 0.85em);
+  --slide-block-padding: clamp(0.2em, 0.9vh, 0.55em);
+}
+
+.reveal {
+  font-size: 34px;
+}
+
+.reveal .slide-number {
+  color: #0065BD;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.reveal .slide h1 {
+  /* Ajuste para que el encabezado generado con `#` no sea excesivamente grande */
+  font-size: 1.25em;
+  line-height: 1.1;
+
+  color: var(--r-heading-color);
+}
+
+.reveal .slide h2 {
+  color: var(--r-heading-color);
+}
+
+.reveal .slides section {
+  box-sizing: border-box;
+  padding: var(--slide-block-padding) var(--slide-inline-padding);
+}
+
+.reveal .footer-default {
+  font-size: 12px !important;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.reveal .footer-default::before {
+  content: "© 2026 Isaac Lera ";
+}
+
+.reveal section img {
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.reveal .citation,
+.reveal a[role="doc-biblioref"] {
+  color: #0b5e8e;
+  font-size: 0.85em;
+}
+
+.reveal .quarto-figure-center + .caption,
+.reveal p.caption,
+.reveal figcaption {
+  font-size: 0.72em;
+  line-height: 1.25;
+  color: rgba(0, 0, 0, 0.78);
+  margin-top: 0.35em;
+}
+
+.reveal #refs {
+  font-size: 1em;
+  line-height: 1.35;
+}
+
+.reveal #refs .csl-entry {
+  display: list-item;
+  list-style-type: disc;
+  list-style-position: outside;
+  margin-left: 1.2em;
+  margin-bottom: 0.45em;
+  padding-left: 0.2em;
+}
+
+.reveal #refs.hanging-indent .csl-entry {
+  text-indent: 0;
+}
+
+.reveal section#referencias.smaller {
+  font-size: 100% !important;
+}
+
+.reveal section#referencias h1 {
+  font-size: 1.25em;
+}
+
+/* Retro yellow-orange style for Actividades slides */
+.reveal .slides section.actividades {
+  background: linear-gradient(135deg, #fff3c4 0%, #ffd27d 58%, #ffb347 100%);
+  border: 3px solid #c86a0a;
+  border-radius: 18px;
+  box-shadow: 0 8px 0 #a75400;
+  padding: 0.8em 1em 1em 1em;
+}
+
+.reveal .slides section.actividades h1 {
+  color: #7a2e00;
+  text-shadow: 1px 1px 0 #ffe2a6;
+  letter-spacing: 0.02em;
+}
+
+.reveal .slides section.actividades p,
+.reveal .slides section.actividades li,
+.reveal .slides section.actividades blockquote {
+  color: #3f2200;
+}
+
+.reveal .slides section.actividades table {
+  background-color: rgba(255, 247, 224, 0.88);
+  border: 2px solid #c86a0a;
+}
+
+.reveal .slides section.actividades th {
+  background-color: #ffb347;
+  color: #5a2200;
+}
+
+/* Cool blue style for Entregable slides */
+.reveal .slides section.entregable {
+  background: linear-gradient(135deg, #d6e9ff 0%, #8ec5ff 58%, #4a9eff 100%);
+  border: 3px solid #1a5fad;
+  border-radius: 18px;
+  box-shadow: 0 8px 0 #0d3d75;
+  padding: 0.8em 1em 1em 1em;
+}
+
+.reveal .slides section.entregable h1 {
+  color: #0a3a6b;
+  text-shadow: 1px 1px 0 #b8d9ff;
+  letter-spacing: 0.02em;
+}
+
+.reveal .slides section.entregable p,
+.reveal .slides section.entregable li,
+.reveal .slides section.entregable blockquote {
+  color: #0c2744;
+}
+
+.reveal .slides section.entregable table {
+  background-color: rgba(230, 242, 255, 0.88);
+  border: 2px solid #1a5fad;
+}
+
+.reveal .slides section.entregable th {
+  background-color: #4a9eff;
+  color: #062447;
+}
+
+/* Compact style for dense technical tables (e.g., OSI) */
+.reveal .table-small {
+  font-size: 0.8em;
+  line-height: 1.15;
+}
+
+.reveal .table-small table {
+  width: 100%;
+}
+
+.reveal .table-small th,
+.reveal .table-small td {
+  padding: 0.28em 0.35em;
+  vertical-align: top;
+}
+
+.reveal .ai-mode-launcher {
+  margin-top: 0.9em;
+}
+
+.reveal .ai-mode-button {
+  display: inline-block;
+  appearance: none;
+  border: 2px solid #0f4c5c;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fff7c2 0%, #ffd166 52%, #f4a261 100%);
+  color: #14323b;
+  font-size: 0.58em;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  padding: 0.55em 1.05em;
+  box-shadow: 0 5px 0 #a65a18;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+}
+
+.reveal a.ai-mode-button,
+.reveal a.ai-mode-button:visited {
+  color: #14323b;
+  text-decoration: none;
+}
+
+.reveal .ai-mode-button:hover,
+.reveal .ai-mode-button:focus-visible {
+  filter: brightness(1.03);
+  transform: translateY(-2px);
+  box-shadow: 0 7px 0 #a65a18;
+}
+
+.reveal .ai-mode-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #a65a18;
+}
+
+.reveal .ai-mode-inline {
+  margin-left: 0.45em;
+  padding: 0.18em 0.7em;
+  font-size: 0.46em;
+  line-height: 1.15;
+  vertical-align: middle;
+  box-shadow: 0 3px 0 #a65a18;
+}
+
+.reveal .ai-mode-inline:hover,
+.reveal .ai-mode-inline:focus-visible {
+  box-shadow: 0 5px 0 #a65a18;
+}
+
+.reveal .ai-mode-inline:active {
+  box-shadow: 0 1px 0 #a65a18;
+}
+
+.ai-mode-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.2rem;
+  transform: translateX(-50%) translateY(24px);
+  max-width: min(92vw, 48rem);
+  background: rgba(20, 50, 59, 0.96);
+  color: #fffdf2;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+  padding: 0.8rem 1rem;
+  font-size: 20px;
+  line-height: 1.35;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease, transform 160ms ease;
+  z-index: 1000;
+}
+
+.ai-mode-toast[data-state="error"] {
+  background: rgba(113, 29, 29, 0.97);
+}
+
+.ai-mode-toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 1100px), (max-aspect-ratio: 4/3) {
+  .reveal {
+    font-size: 30px;
+  }
+
+  .reveal .slide .absolute {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    transform: none !important;
+    width: min(100%, 18rem) !important;
+    max-width: 100% !important;
+    margin: 1rem auto 0 auto;
+  }
+}
+
+@media (max-width: 800px) {
+  .reveal {
+    font-size: 26px;
+  }
+
+  .reveal .slides section {
+    padding-inline: clamp(0.35em, 4vw, 0.7em);
+  }
+
+  .reveal .ai-mode-button {
+    font-size: 0.62em;
+  }
+
+  .reveal .ai-mode-inline {
+    font-size: 0.52em;
+  }
+
+  .ai-mode-toast {
+    font-size: 16px;
+    bottom: 0.8rem;
+  }
+}
+
+html.reveal-print .ai-mode-launcher,
+html.reveal-print .ai-mode-toast {
+  display: none !important;
+}
+
+@media print {
+  .ai-mode-launcher,
+  .ai-mode-toast {
+    display: none !important;
+  }
+}
