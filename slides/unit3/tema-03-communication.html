@@ -222,8 +222,8 @@
 </div>
 
 </section>
-<section id="comunication" class="slide level1">
-<h1>Comunication</h1>
+<section id="communication" class="slide level1">
+<h1>Communication</h1>
 <ul>
 <li>Sockets</li>
 <li>Remote Procedure Control</li>
@@ -247,7 +247,7 @@
 <section id="sockets-1" class="slide level1">
 <h1>Sockets</h1>
 <p>A socket is an abstract object from which messages are sent and received. Like a file descriptor.</p>
-<p><img src="../../images/03/socket.png" style="width: 80%; height: auto; border: 0; box-shadow: none; background: transparent;"></p>
+<p><img src="../images/03/socket.png" style="width: 80%; height: auto; border: 0; box-shadow: none; background: transparent;"></p>
 </section>
 <section id="sockets.-connection-oriented-tcp-socket-operations" class="slide level1">
 <h1>Sockets. Connection-oriented (TCP) socket operations</h1>
@@ -338,44 +338,208 @@
 <span id="cb6-2"><a href=""></a><span class="ex">├──</span> A_server_getTime.py</span>
 <span id="cb6-3"><a href=""></a><span class="ex">├──</span> B1_server_getTime.py</span>
 <span id="cb6-4"><a href=""></a><span class="ex">├──</span> B_server_getTime.py</span>
-<span id="cb6-5"><a href=""></a><span class="ex">├──</span> C_client.py</span>
-<span id="cb6-6"><a href=""></a><span class="ex">├──</span> C_server_returnUpperChars.py</span>
-<span id="cb6-7"><a href=""></a><span class="ex">├──</span> D_server_game.py</span>
-<span id="cb6-8"><a href=""></a><span class="ex">└──</span> README.md</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-5"><a href=""></a><span class="ex">...</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="entregable" class="slide level1 entregable">
 <h1>Entregable</h1>
 <ul>
 <li>Implementa un servicio mediante <strong>sockets</strong> que ofrece las siguientes operaciones matemáticas: add, sub, div, mult, sqrt, mean, y std.</li>
-<li>Un sistema para lanzar n-clientes que consumiran estas operaciones siguiendo una distribución exponencial de activación.</li>
-<li>Monitoriza las conexiones y el tráfico.</li>
-<li>Justifica las consideraciones de diseño e implementación tomadas.</li>
+<li>Cada cliente enviará peticiones al servidor. El tiempo entre peticiones seguirá una distribución exponencial cuya tasa pueda configurarse. El programa permitirá ajustar también el número de clientes y la duración del experimento.</li>
+<li>Durante la ejecución, registra al menos el número de conexiones activas, las peticiones atendidas, los errores, el volumen de datos intercambiados y el tiempo de respuesta.</li>
+<li>Justifica las consideraciones de diseño e implementación tomadas bajo el SD paradigma.</li>
+<li><strong>Entrega</strong>: En AD incluir el enlace al repositorio (abierto) donde esté el código fuente y las descripciones pertinentes.</li>
 </ul>
 </section>
-<section id="remote-procedure-control-rpc" class="slide level1">
-<h1>Remote Procedure Control (RPC)</h1>
+<section id="remote-procedure-control-rpc-1984" class="slide level1">
+<h1>Remote Procedure Control (RPC) (1984)</h1>
 <p>RPC: Protocol to call procedures on other machines. <span class="citation" data-cites="RPCBirrell">(<a href="#/referencias" role="doc-biblioref" onclick="">Birrell and Nelson 1984</a>)</span></p>
-<p>[<span class="citation" data-cites="RPCBirrell">Birrell and Nelson (<a href="#/referencias" role="doc-biblioref" onclick="">1984</a>)</span>][https://web.eecs.umich.edu/~mosharaf/Readings/RPC.pdf](https://web.eecs.umich.edu/~mosharaf/Readings/RPC.pdf)</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href=""></a><span class="ex">-</span> ¿Cuál es el objetivo que presentan los autores de este trabajo<span class="pp">?</span></span>
-<span id="cb7-2"><a href=""></a><span class="ex">-</span> ¿Qué estaba ocurriendo para plantear: <span class="kw">``</span>¿Por qué programar entre dos máquinas tiene que ser mucho más complicado que llamar a una función dentro del mismo programa<span class="pp">?</span><span class="st">''</span> <span class="pp">?</span> </span>
-<span id="cb7-3"><a href=""></a><span class="ex">-</span> ¿Qué requerimientos son necesarios por parte del Sistema Operativo<span class="pp">?</span></span>
-<span id="cb7-4"><a href=""></a><span class="ex">-</span> ¿Qué retos presenta el RPC<span class="pp">?</span></span>
-<span id="cb7-5"><a href=""></a><span class="ex">-</span> ¿Qué significado tiene <span class="kw">`</span><span class="ex">stub</span><span class="kw">`</span><span class="pp">?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="evolución-rpc---web-browser-i" class="slide level1">
-<h1>Evolución RPC -&gt; Web browser (I)</h1>
+<blockquote>
+<p>The idea of treating network operations as remote procedure calls goes back at least to the 1970s in early&nbsp;ARPANET&nbsp;documents.&nbsp;In 1978,&nbsp;Per Brinch Hansen&nbsp;proposed Distributed Processes, a language for distributed computing based on “external requests” consisting of procedure calls between processes.</p>
+</blockquote>
+<h4 id="responde-a">Responde a:</h4>
+<p><span class="citation" data-cites="RPCBirrell">(<a href="#/referencias" role="doc-biblioref" onclick="">Birrell and Nelson 1984</a>)</span> https://web.eecs.umich.edu/~mosharaf/Readings/RPC.pdf</p>
 <ul>
-<li><p>RPC orientado a objetos: <a href="https://en.wikipedia.org/wiki/Common_Object_Request_Broker_Architecture">CORBA</a>, Java RMI, DCOM</p></li>
-<li><p>Web browser: dominant model for user interaction on the internet. Transport over HTTP protocol. Web services: XML-RPC, SOAP</p></li>
+<li>¿Cuál es el objetivo que presentan los autores de este trabajo?</li>
+<li>¿Qué estaba ocurriendo para plantear: ``¿Por qué programar entre dos máquinas tiene que ser mucho más complicado que llamar a una función dentro del mismo programa?’’ ?</li>
+<li>¿Qué requerimientos son necesarios por parte del Sistema Operativo?</li>
+<li>¿Qué retos presenta el RPC?</li>
+<li>¿Qué significado tiene <code>stub</code>?</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb8-1"><a href=""></a>&lt;<span class="kw">Call</span>&gt;</span>
-<span id="cb8-2"><a href=""></a>   &lt;<span class="kw">Method</span>&gt;sumar&lt;/<span class="kw">Method</span>&gt;</span>
-<span id="cb8-3"><a href=""></a>   &lt;<span class="kw">Parametro</span>&gt;5&lt;/<span class="kw">Parametro</span>&gt;</span>
-<span id="cb8-4"><a href=""></a>   &lt;<span class="kw">Parametro</span>&gt;8&lt;/<span class="kw">Parametro</span>&gt;</span>
-<span id="cb8-5"><a href=""></a>&lt;/<span class="kw">Call</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="evolución-rpc---web-browser-ii" class="slide level1">
-<h1>Evolución RPC -&gt; Web browser (II)</h1>
+<section id="remote-procedure-control-rpc-1984-1" class="slide level1">
+<h1>Remote Procedure Control (RPC) (1984)</h1>
+<p><img src="../images/03/rpc.png" style="width: 60%; height: auto; border: 0; box-shadow: none; background: transparent;"></p>
+</section>
+<section id="rpc-orientado-a-objetos-1995" class="slide level1">
+<h1>RPC orientado a objetos (1995)</h1>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Common_Object_Request_Broker_Architecture">CORBA</a>, Java RMI, DCOM</li>
+</ul>
+</section>
+<section id="xml-rpc-soap" class="slide level1">
+<h1>XML-RPC &amp; SOAP*</h1>
+<ul>
+<li>Web browser: dominant model for user interaction on the internet. Transport over HTTP protocol. Web services: XML-RPC, SOAP</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb7-1"><a href=""></a>&lt;<span class="kw">Call</span>&gt;</span>
+<span id="cb7-2"><a href=""></a>   &lt;<span class="kw">Method</span>&gt;sumar&lt;/<span class="kw">Method</span>&gt;</span>
+<span id="cb7-3"><a href=""></a>   &lt;<span class="kw">Parametro</span>&gt;5&lt;/<span class="kw">Parametro</span>&gt;</span>
+<span id="cb7-4"><a href=""></a>   &lt;<span class="kw">Parametro</span>&gt;8&lt;/<span class="kw">Parametro</span>&gt;</span>
+<span id="cb7-5"><a href=""></a>&lt;/<span class="kw">Call</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="actividades-1" class="slide level1 actividades">
+<h1>Actividades</h1>
+<p><a href="https://github.com/wisaaco/AA_DistributedSystems_Lab">https://github.com/wisaaco/AA_DistributedSystems_Lab</a></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href=""></a><span class="ex">U2-RPC</span> </span>
+<span id="cb8-2"><a href=""></a><span class="ex">├──</span> A_client.py   <span class="op">&lt;&lt;&lt;</span></span>
+<span id="cb8-3"><a href=""></a><span class="ex">├──</span> A_server.py   <span class="op">&lt;&lt;&lt;</span></span>
+<span id="cb8-4"><a href=""></a><span class="ex">├──</span> B_restful-app.py</span>
+<span id="cb8-5"><a href=""></a><span class="ex">├──</span> C_restful-Swagger.py</span>
+<span id="cb8-6"><a href=""></a><span class="ex">├──</span> README.md</span>
+<span id="cb8-7"><a href=""></a><span class="ex">├──</span> app.py</span>
+<span id="cb8-8"><a href=""></a><span class="ex">├──</span> openapi.yaml</span>
+<span id="cb8-9"><a href=""></a><span class="ex">└──</span> withCorba    <span class="op">&lt;&lt;&lt;</span></span>
+<span id="cb8-10"><a href=""></a>    <span class="ex">├──</span> README.md</span>
+<span id="cb8-11"><a href=""></a>    <span class="ex">└──</span> echo</span>
+<span id="cb8-12"><a href=""></a>        <span class="ex">├──</span> echo.idl</span>
+<span id="cb8-13"><a href=""></a>        <span class="ex">├──</span> echo_clt.py</span>
+<span id="cb8-14"><a href=""></a>        <span class="ex">└──</span> echo_srv.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="actividades-2" class="slide level1 actividades">
+<h1>Actividades</h1>
+<p>Cuestiones:</p>
+<ul>
+<li>Cómo máximo una vez y no más por cliente. ¿Cómo se implementa una función RPC que se ejecuta por un cliente como máximo una vez?</li>
+<li>Al menos una vez por cliente. ¿Cómo se implementa una función RPC que se ejecuta solo una vez?</li>
+<li>¿Cómo afecta esta semántica a la definición del RPC? ¿Cómo pueden afectar los fallos a la coherencia?</li>
+</ul>
+</section>
+<section id="rpc-issues" class="slide level1">
+<h1>RPC Issues</h1>
+<p>More RPC Issues/Problems:</p>
+<ul>
+<li><p>Interoperability: different languages, OS, Hardware</p></li>
+<li><p>Firewalls: dynamic ports</p></li>
+<li><p>State: load balancing, resources, network failures,…</p></li>
+<li><p>No group communication - no replication</p></li>
+<li><p>No asynchronous messaging:</p>
+<ul>
+<li>Large streaming responses not possible</li>
+<li>Notifications of delays not possibly</li>
+<li>No subscribe-publish models</li>
+</ul></li>
+</ul>
+</section>
+<section id="internet-and-web-services" class="slide level1">
+<h1>Internet and Web services</h1>
+<p>Service-Oriented Architecture: Emerged in the context of web services to allow systems developed with different technologies to communicate through a common format. Their messages use XML and are typically transported over HTTP.</p>
+<p><img src="../images/03/SOA.png" style="width: 60%; height: auto; border: 0; box-shadow: none; background: transparent;"></p>
+</section>
+<section id="service-oriented-architecture-soa" class="slide level1">
+<h1>Service-Oriented Architecture (SOA)</h1>
+<p>Benefits of SOA:</p>
+<ul>
+<li><p>Autonomous modules, and support reuse of modules across the applications</p></li>
+<li><p>Loose coupling:</p>
+<ul>
+<li>Requires minimal knowledge</li>
+<li>Migration: services can be located and recolated on any servers</li>
+<li>Scalability: new services can be added/removed on demmand…and on different server.. or load balanced</li>
+<li>Updates: individual services can be replace without interruption</li>
+</ul></li>
+</ul>
+</section>
+<section id="soa-microservices" class="slide level1">
+<h1>SOA &amp; Microservices</h1>
+<div class="columns">
+<div class="column" style="width:60%;">
+<p><img src="../images/03/microservicio.png" style="width: 90%; height: auto; border: 0; box-shadow: none; background: transparent;"></p>
+</div><div class="column" style="width:40%;">
+<p><a href="https://martinfowler.com/articles/microservices.html">Martin Fowler</a> is an author, speaker, and general loud-mouth on software development. He’s long been puzzled by the problem of how to componentize software systems, having heard more vague claims than he’s happy with. He hopes that microservices will live up to the early promise its advocates have found.</p>
+</div></div>
+</section>
+<section id="simple-object-access-protocol-soap" class="slide level1">
+<h1>Simple Object Access Protocol (SOAP)</h1>
+<p>SOAP (Simple Object Access Protocol) is a protocol for exchanging structured messages between applications. A SOAP message is written in XML and is commonly sent over HTTP. It has an Envelope containing an optional Header and a Body. If processing fails, the Body can contain a Fault describing the error.</p>
+<p>WSDL (Web Services Description Language). The WSDL describes the available operations, the data they accept and return, and where to send requests. This lets a client call a service without knowing how the server is implemented.</p>
+<p><strong>Example</strong>: OTA Standard - XML messages exchanged by the standard interface are based on standard Open Travel Alliance (OTA) 2003.</p>
+<ul>
+<li><a href="http://www.opentravel.org/">http://www.opentravel.org/</a></li>
+<li><a href="https://ota-doc.weekendesk.com/#introduction">https://ota-doc.weekendesk.com/#introduction</a></li>
+</ul>
+</section>
+<section id="anyai-generate-a-basic-wsdl-example" class="slide level1">
+<h1>anyAI: “generate a basic WSDL example”</h1>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb9-1"><a href=""></a><span class="fu">&lt;?xml</span> <span class="ot">version=</span><span class="st">"1.0"</span> <span class="ot">encoding=</span><span class="st">"UTF-8"</span><span class="fu">?&gt;</span></span>
+<span id="cb9-2"><a href=""></a>&lt;<span class="kw">definitions</span></span>
+<span id="cb9-3"><a href=""></a>    <span class="ot">xmlns=</span><span class="st">"http://schemas.xmlsoap.org/wsdl/"</span></span>
+<span id="cb9-4"><a href=""></a>    <span class="ot">xmlns:soap=</span><span class="st">"http://schemas.xmlsoap.org/wsdl/soap/"</span></span>
+<span id="cb9-5"><a href=""></a>    <span class="ot">xmlns:tns=</span><span class="st">"http://example.org/calculator"</span></span>
+<span id="cb9-6"><a href=""></a>    <span class="ot">xmlns:xsd=</span><span class="st">"http://www.w3.org/2001/XMLSchema"</span></span>
+<span id="cb9-7"><a href=""></a>    <span class="ot">targetNamespace=</span><span class="st">"http://example.org/calculator"</span></span>
+<span id="cb9-8"><a href=""></a>    <span class="ot">name=</span><span class="st">"CalculatorService"</span>&gt;</span>
+<span id="cb9-9"><a href=""></a></span>
+<span id="cb9-10"><a href=""></a>  &lt;<span class="kw">types</span>&gt;</span>
+<span id="cb9-11"><a href=""></a>    &lt;<span class="kw">xsd:schema</span> <span class="ot">targetNamespace=</span><span class="st">"http://example.org/calculator"</span>&gt;</span>
+<span id="cb9-12"><a href=""></a>      &lt;<span class="kw">xsd:element</span> <span class="ot">name=</span><span class="st">"AddRequest"</span>&gt;</span>
+<span id="cb9-13"><a href=""></a>        &lt;<span class="kw">xsd:complexType</span>&gt;</span>
+<span id="cb9-14"><a href=""></a>          &lt;<span class="kw">xsd:sequence</span>&gt;</span>
+<span id="cb9-15"><a href=""></a>            &lt;<span class="kw">xsd:element</span> <span class="ot">name=</span><span class="st">"a"</span> <span class="ot">type=</span><span class="st">"xsd:int"</span>/&gt;</span>
+<span id="cb9-16"><a href=""></a>            &lt;<span class="kw">xsd:element</span> <span class="ot">name=</span><span class="st">"b"</span> <span class="ot">type=</span><span class="st">"xsd:int"</span>/&gt;</span>
+<span id="cb9-17"><a href=""></a>          &lt;/<span class="kw">xsd:sequence</span>&gt;</span>
+<span id="cb9-18"><a href=""></a>        &lt;/<span class="kw">xsd:complexType</span>&gt;</span>
+<span id="cb9-19"><a href=""></a>      &lt;/<span class="kw">xsd:element</span>&gt;</span>
+<span id="cb9-20"><a href=""></a></span>
+<span id="cb9-21"><a href=""></a>      &lt;<span class="kw">xsd:element</span> <span class="ot">name=</span><span class="st">"AddResponse"</span>&gt;</span>
+<span id="cb9-22"><a href=""></a>        &lt;<span class="kw">xsd:complexType</span>&gt;</span>
+<span id="cb9-23"><a href=""></a>          &lt;<span class="kw">xsd:sequence</span>&gt;</span>
+<span id="cb9-24"><a href=""></a>            &lt;<span class="kw">xsd:element</span> <span class="ot">name=</span><span class="st">"result"</span> <span class="ot">type=</span><span class="st">"xsd:int"</span>/&gt;</span>
+<span id="cb9-25"><a href=""></a>          &lt;/<span class="kw">xsd:sequence</span>&gt;</span>
+<span id="cb9-26"><a href=""></a>        &lt;/<span class="kw">xsd:complexType</span>&gt;</span>
+<span id="cb9-27"><a href=""></a>      &lt;/<span class="kw">xsd:element</span>&gt;</span>
+<span id="cb9-28"><a href=""></a>    &lt;/<span class="kw">xsd:schema</span>&gt;</span>
+<span id="cb9-29"><a href=""></a>  &lt;/<span class="kw">types</span>&gt;</span>
+<span id="cb9-30"><a href=""></a></span>
+<span id="cb9-31"><a href=""></a>  &lt;<span class="kw">message</span> <span class="ot">name=</span><span class="st">"AddInput"</span>&gt;</span>
+<span id="cb9-32"><a href=""></a>    &lt;<span class="kw">part</span> <span class="ot">name=</span><span class="st">"parameters"</span> <span class="ot">element=</span><span class="st">"tns:AddRequest"</span>/&gt;</span>
+<span id="cb9-33"><a href=""></a>  &lt;/<span class="kw">message</span>&gt;</span>
+<span id="cb9-34"><a href=""></a>  &lt;<span class="kw">message</span> <span class="ot">name=</span><span class="st">"AddOutput"</span>&gt;</span>
+<span id="cb9-35"><a href=""></a>    &lt;<span class="kw">part</span> <span class="ot">name=</span><span class="st">"parameters"</span> <span class="ot">element=</span><span class="st">"tns:AddResponse"</span>/&gt;</span>
+<span id="cb9-36"><a href=""></a>  &lt;/<span class="kw">message</span>&gt;</span>
+<span id="cb9-37"><a href=""></a></span>
+<span id="cb9-38"><a href=""></a>  &lt;<span class="kw">portType</span> <span class="ot">name=</span><span class="st">"CalculatorPortType"</span>&gt;</span>
+<span id="cb9-39"><a href=""></a>    &lt;<span class="kw">operation</span> <span class="ot">name=</span><span class="st">"Add"</span>&gt;</span>
+<span id="cb9-40"><a href=""></a>      &lt;<span class="kw">input</span> <span class="ot">message=</span><span class="st">"tns:AddInput"</span>/&gt;</span>
+<span id="cb9-41"><a href=""></a>      &lt;<span class="kw">output</span> <span class="ot">message=</span><span class="st">"tns:AddOutput"</span>/&gt;</span>
+<span id="cb9-42"><a href=""></a>    &lt;/<span class="kw">operation</span>&gt;</span>
+<span id="cb9-43"><a href=""></a>  &lt;/<span class="kw">portType</span>&gt;</span>
+<span id="cb9-44"><a href=""></a></span>
+<span id="cb9-45"><a href=""></a>  &lt;<span class="kw">binding</span> <span class="ot">name=</span><span class="st">"CalculatorBinding"</span> <span class="ot">type=</span><span class="st">"tns:CalculatorPortType"</span>&gt;</span>
+<span id="cb9-46"><a href=""></a>    &lt;<span class="kw">soap:binding</span> <span class="ot">style=</span><span class="st">"document"</span></span>
+<span id="cb9-47"><a href=""></a>                  <span class="ot">transport=</span><span class="st">"http://schemas.xmlsoap.org/soap/http"</span>/&gt;</span>
+<span id="cb9-48"><a href=""></a>    &lt;<span class="kw">operation</span> <span class="ot">name=</span><span class="st">"Add"</span>&gt;</span>
+<span id="cb9-49"><a href=""></a>      &lt;<span class="kw">soap:operation</span> <span class="ot">soapAction=</span><span class="st">"http://example.org/calculator/Add"</span>/&gt;</span>
+<span id="cb9-50"><a href=""></a>      &lt;<span class="kw">input</span>&gt;&lt;<span class="kw">soap:body</span> <span class="ot">use=</span><span class="st">"literal"</span>/&gt;&lt;/<span class="kw">input</span>&gt;</span>
+<span id="cb9-51"><a href=""></a>      &lt;<span class="kw">output</span>&gt;&lt;<span class="kw">soap:body</span> <span class="ot">use=</span><span class="st">"literal"</span>/&gt;&lt;/<span class="kw">output</span>&gt;</span>
+<span id="cb9-52"><a href=""></a>    &lt;/<span class="kw">operation</span>&gt;</span>
+<span id="cb9-53"><a href=""></a>  &lt;/<span class="kw">binding</span>&gt;</span>
+<span id="cb9-54"><a href=""></a></span>
+<span id="cb9-55"><a href=""></a>  &lt;<span class="kw">service</span> <span class="ot">name=</span><span class="st">"CalculatorService"</span>&gt;</span>
+<span id="cb9-56"><a href=""></a>    &lt;<span class="kw">port</span> <span class="ot">name=</span><span class="st">"CalculatorPort"</span> <span class="ot">binding=</span><span class="st">"tns:CalculatorBinding"</span>&gt;</span>
+<span id="cb9-57"><a href=""></a>      &lt;<span class="kw">soap:address</span> <span class="ot">location=</span><span class="st">"https://example.org/calculator"</span>/&gt;</span>
+<span id="cb9-58"><a href=""></a>    &lt;/<span class="kw">port</span>&gt;</span>
+<span id="cb9-59"><a href=""></a>  &lt;/<span class="kw">service</span>&gt;</span>
+<span id="cb9-60"><a href=""></a>&lt;/<span class="kw">definitions</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="actividades-3" class="slide level1 actividades">
+<h1>Actividades</h1>
+<ul>
+<li>¿Qué es Eclipse Glassfish y Apache Tomcat? ¿Qué papel desempeñan dentro de una arquitectura SOAP?</li>
+<li>¿Qué tipo de archivo tiene la extensión WAR?</li>
+</ul>
+</section>
+<section id="rest-20002005" class="slide level1">
+<h1>REST (2000~2005)</h1>
 <ul>
 <li><p><a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST - REpresentational State Transfer</a></p></li>
 <li><p>Four HTTP commands to operate on data (a resource):</p>
@@ -385,17 +549,74 @@
 </ul></li>
 </ul>
 </section>
-<section id="actividades-1" class="slide level1 actividades">
+<section id="actividades-4" class="slide level1 actividades">
+<h1>Actividades</h1>
+<p>Principios:</p>
+<ul>
+<li><a href="https://opensource.zalando.com/restful-api-guidelines/">https://opensource.zalando.com/restful-api-guidelines/</a></li>
+<li><a href="https://docs.cloud.google.com/apis/design">https://docs.cloud.google.com/apis/design</a></li>
+<li><a href="https://www.openapis.org/">https://www.openapis.org/</a></li>
+</ul>
+</section>
+<section id="actividades-5" class="slide level1 actividades">
+<h1>Actividades</h1>
+<ul>
+<li>¿Qué papel desempeña Flask? ¿Qué diferencias hay entre Flask y Tomcat?</li>
+</ul>
+<p><a href="https://github.com/wisaaco/AA_DistributedSystems_Lab">https://github.com/wisaaco/AA_DistributedSystems_Lab</a></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href=""></a><span class="ex">U2-RPC</span> </span>
+<span id="cb10-2"><a href=""></a><span class="ex">├──</span> A_client.py</span>
+<span id="cb10-3"><a href=""></a><span class="ex">├──</span> A_server.py</span>
+<span id="cb10-4"><a href=""></a><span class="ex">├──</span> B_restful-app.py    <span class="op">&lt;&lt;&lt;</span></span>
+<span id="cb10-5"><a href=""></a><span class="ex">├──</span> C_restful-Swagger.py <span class="op">&lt;&lt;&lt;</span></span>
+<span id="cb10-6"><a href=""></a><span class="ex">├──</span> README.md</span>
+<span id="cb10-7"><a href=""></a><span class="ex">├──</span> app.py  <span class="op">&lt;&lt;&lt;</span></span>
+<span id="cb10-8"><a href=""></a><span class="ex">├──</span> openapi.yaml <span class="op">&lt;&lt;&lt;</span></span>
+<span id="cb10-9"><a href=""></a><span class="ex">└──</span> withCorba</span>
+<span id="cb10-10"><a href=""></a>    <span class="ex">├──</span> README.md</span>
+<span id="cb10-11"><a href=""></a>    <span class="ex">└──</span> echo</span>
+<span id="cb10-12"><a href=""></a>        <span class="ex">├──</span> echo.idl</span>
+<span id="cb10-13"><a href=""></a>        <span class="ex">├──</span> echo_clt.py</span>
+<span id="cb10-14"><a href=""></a>        <span class="ex">└──</span> echo_srv.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="grpc-2015-de-google-rpc" class="slide level1">
+<h1>gRPC (2015) “de Google RPC”</h1>
+<p>A <a href="https://grpc.io/">gRPC</a> service is defined in a .proto file using Protocol Buffers. This file specifies the available methods and the structure of their request and response messages. Client and server code can then be generated from the same definition. gRPC commonly uses HTTP/2 to transport messages.</p>
+<p><code>calculator.proto</code> example:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource txt number-lines code-with-copy"><code class="sourceCode default"><span id="cb11-1"><a href=""></a>syntax = "proto3";</span>
+<span id="cb11-2"><a href=""></a></span>
+<span id="cb11-3"><a href=""></a>service Calculator {</span>
+<span id="cb11-4"><a href=""></a>  rpc Add(AddRequest) returns (AddResponse);</span>
+<span id="cb11-5"><a href=""></a>}</span>
+<span id="cb11-6"><a href=""></a></span>
+<span id="cb11-7"><a href=""></a>message AddRequest {</span>
+<span id="cb11-8"><a href=""></a>  int32 a = 1;</span>
+<span id="cb11-9"><a href=""></a>  int32 b = 2;</span>
+<span id="cb11-10"><a href=""></a>}</span>
+<span id="cb11-11"><a href=""></a></span>
+<span id="cb11-12"><a href=""></a>message AddResponse {</span>
+<span id="cb11-13"><a href=""></a>  int32 result = 1;</span>
+<span id="cb11-14"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="actividades-6" class="slide level1 actividades">
 <h1>Actividades</h1>
 <p><a href="https://github.com/wisaaco/AA_DistributedSystems_Lab">https://github.com/wisaaco/AA_DistributedSystems_Lab</a></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href=""></a><span class="ex">U2-RPC</span> </span>
-<span id="cb9-2"><a href=""></a><span class="ex">├──</span> A_client.py  </span>
-<span id="cb9-3"><a href=""></a><span class="ex">├──</span> A_server.py</span>
-<span id="cb9-4"><a href=""></a><span class="ex">├──</span> B_restful-app.py</span>
-<span id="cb9-5"><a href=""></a><span class="ex">├──</span> C_restful-Swagger.py</span>
-<span id="cb9-6"><a href=""></a><span class="ex">├──</span> README.md</span>
-<span id="cb9-7"><a href=""></a><span class="ex">├──</span> app.py</span>
-<span id="cb9-8"><a href=""></a><span class="ex">├──</span> openapi.yaml</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href=""></a><span class="ex">U2-RPC</span> </span>
+<span id="cb12-2"><a href=""></a><span class="ex">...</span></span>
+<span id="cb12-3"><a href=""></a><span class="ex">└──</span> withGRPC</span>
+<span id="cb12-4"><a href=""></a>    <span class="ex">├──</span> README.md</span>
+<span id="cb12-5"><a href=""></a>    <span class="ex">├──</span> calculator.proto</span>
+<span id="cb12-6"><a href=""></a>    <span class="ex">├──</span> client.py</span>
+<span id="cb12-7"><a href=""></a>    <span class="ex">└──</span> server.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="entregable-1" class="slide level1 entregable">
+<h1>Entregable</h1>
+<ul>
+<li>Implementa mediante <strong>Rest</strong>, y el lenguaje que desees, una calculadora: add, sub, div, mult, sqrt, mean, std y reset.</li>
+<li>El usuario ha de conservar su último valor, por eso existe la operación especial <code>reset</code>.</li>
+<li>Justifica las consideraciones de diseño e implementación tomadas bajo el SD paradigma.</li>
+<li><strong>Entrega</strong>: En AD incluir el enlace al repositorio (abierto) donde esté el código fuente y las descripciones pertinentes.</li>
+</ul>
 </section>
 <section id="referencias" class="slide level1 allowframebreaks smaller scrollable">
 <h1>Referencias</h1>
