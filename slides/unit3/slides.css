@@ -96,7 +96,8 @@
 }
 
 /* Retro yellow-orange style for Actividades slides */
-.reveal .slides section.actividades {
+.reveal .slides section.actividades,
+.reveal .slides section.activity {
   background: linear-gradient(135deg, #fff3c4 0%, #ffd27d 58%, #ffb347 100%);
   border: 3px solid #c86a0a;
   border-radius: 18px;
@@ -104,7 +105,8 @@
   padding: 0.8em 1em 1em 1em;
 }
 
-.reveal .slides section.actividades h1 {
+.reveal .slides section.actividades h1,
+.reveal .slides section.activity h1 {
   color: #7a2e00;
   text-shadow: 1px 1px 0 #ffe2a6;
   letter-spacing: 0.02em;
@@ -112,16 +114,21 @@
 
 .reveal .slides section.actividades p,
 .reveal .slides section.actividades li,
-.reveal .slides section.actividades blockquote {
+.reveal .slides section.actividades blockquote,
+.reveal .slides section.activity p,
+.reveal .slides section.activity li,
+.reveal .slides section.activity blockquote {
   color: #3f2200;
 }
 
-.reveal .slides section.actividades table {
+.reveal .slides section.actividades table,
+.reveal .slides section.activity table {
   background-color: rgba(255, 247, 224, 0.88);
   border: 2px solid #c86a0a;
 }
 
-.reveal .slides section.actividades th {
+.reveal .slides section.actividades th,
+.reveal .slides section.activity th {
   background-color: #ffb347;
   color: #5a2200;
 }

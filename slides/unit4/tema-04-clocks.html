@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="tema-04-clocks_files/libs/clipboard/clipboard.min.js"></script>
+<script src="tema-04-clocks_files/libs/quarto-html/tabby.min.js"></script>
+<script src="tema-04-clocks_files/libs/quarto-html/popper.min.js"></script>
+<script src="tema-04-clocks_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="tema-04-clocks_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="tema-04-clocks_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="tema-04-clocks_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.37">
+
+  <title>Tema 4. Clocks and Events</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="tema-04-clocks_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="tema-04-clocks_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="tema-04-clocks_files/libs/revealjs/dist/theme/quarto-0427d8d92a431aa6a6430e53ec02a470.css">
+  <link rel="stylesheet" href="slides.css">
+  <link href="tema-04-clocks_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="tema-04-clocks_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="tema-04-clocks_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="tema-04-clocks_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Tema 4. Clocks and Events</h1>
+  <p class="subtitle">Sistemas Actuales de Computación</p>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="clocks-and-events" class="slide level1">
+<h1>Clocks and Events</h1>
+<ul>
+<li>Physical clock</li>
+<li>Logical clocks</li>
+</ul>
+</section>
+<section id="why-time-is-so-important" class="slide level1">
+<h1>Why time is so important?</h1>
+<p>Global log:</p>
+<ul>
+<li>Know at what time of day an event occurred at particular computer: auditing purposes</li>
+</ul>
+<p>Synchronization and coordination:</p>
+<ul>
+<li>Consistency of distributed data</li>
+</ul>
+<blockquote>
+<p>No global time! &amp; Different observers - Theory of Relativity -</p>
+</blockquote>
+</section>
+<section id="asynchronous-networks" class="slide level1">
+<h1>Asynchronous Networks</h1>
+<p>In ethernet protocol, the network has to be considered asynchronous:</p>
+<ul>
+<li>a lower bound, “min”</li>
+<li>a “modus operandi”</li>
+<li>But not hard upper bound.</li>
+</ul>
+<p>Some algorithms assumes a upper bound</p>
+</section>
+<section id="clocks" class="slide level1">
+<h1>Clocks</h1>
+<p><strong>Hardware clock</strong> (<span class="math inline">\(H\)</span>): crystal oscillator. Its frequency varies with temperature, voltage, aging… so it <em>drifts</em> from true time.</p>
+<p><strong>Drift rate</strong>: how much the clock gains/loses per unit of real time relative to a perfect reference (e.g.&nbsp;<span class="math inline">\(10^{-6}\)</span> <span class="math inline">\(\Rightarrow\)</span> 1,µs error per second).</p>
+<p><strong>Software clock</strong> (<span class="math inline">\(C\)</span>): what the OS exposes to applications:</p>
+<p><span class="math display">\[C(t) = \alpha\, H(t) + \beta\]</span></p>
+<ul>
+<li><span class="math inline">\(\beta\)</span> (<em>offset</em>): corrects the current error (phase).</li>
+<li><span class="math inline">\(\alpha\)</span> (<em>skew / scale</em>): corrects the rate so future drift accumulates more slowly.</li>
+</ul>
+<p>The OS typically <strong>slews</strong> time (gradually updates <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>) instead of jumping the clock, to keep timestamps monotonic. Protocols such as NTP estimate offset and drift from external references and feed those corrections to the OS.</p>
+<aside class="notes">
+<p>Successive events get different timestamps only if the clock <em>resolution</em> is finer than the interval between them.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="events" class="slide level1">
+<h1>Events</h1>
+<p><strong>The important thing in a log is the order, not the time.</strong></p>
+<p><strong>Partial ordering</strong> (happened-before, <span class="math inline">\(\to\)</span>):</p>
+<ul>
+<li>Relates events only when there is a causal dependence.</li>
+<li>Defined by: (1) same process, <span class="math inline">\(e\)</span> before <span class="math inline">\(e'\)</span> <span class="math inline">\(\Rightarrow\)</span> <span class="math inline">\(e \to e'\)</span>; (2) send before corresponding receive; (3) transitivity.</li>
+<li>Some events are <em>concurrent</em>: neither <span class="math inline">\(e \to e'\)</span> nor <span class="math inline">\(e' \to e\)</span> (no causal path).</li>
+<li>Logical / vector clocks capture this order.</li>
+</ul>
+<p><strong>Total ordering</strong>:</p>
+<ul>
+<li>Every pair of events is comparable: either <span class="math inline">\(e &lt; e'\)</span> or <span class="math inline">\(e' &lt; e\)</span>.</li>
+<li>Extends the partial order by breaking ties (e.g.&nbsp;Lamport timestamp + process id).</li>
+<li>Useful when the system needs a single agreed sequence of events (global log, mutual exclusion, totally ordered multicast).</li>
+</ul>
+</section>
+<section id="physical-clocks-sync-goals" class="slide level1">
+<h1>Physical clocks: sync goals</h1>
+<p>Two related goals (let <span class="math inline">\(C_i(t)\)</span> be the software clock of process <span class="math inline">\(i\)</span>, and <span class="math inline">\(t\)</span> real time):</p>
+<p><strong>Internal synchronization</strong> (consistency among nodes):</p>
+<p><span class="math display">\[|C_i(t) - C_j(t)| &lt; \delta \quad \forall i,j\]</span></p>
+<p>Clocks agree with each other within bound <span class="math inline">\(\delta\)</span> — enough for many distributed algorithms.</p>
+<p><strong>External synchronization</strong> (accuracy w.r.t. real time / UTC):</p>
+<p><span class="math display">\[|C_i(t) - t| &lt; \varepsilon \quad \forall i\]</span></p>
+<p>Requires an <em>authoritative</em> time source (atomic clock, GPS, NTP stratum-1).<br>
+External sync <span class="math inline">\(\Rightarrow\)</span> internal sync with <span class="math inline">\(\delta = 2\varepsilon\)</span>, but not the converse.</p>
+</section>
+<section id="network-time-protocol-ntp" class="slide level1">
+<h1>Network Time Protocol (NTP)</h1>
+<p><a href="https://en.wikipedia.org/wiki/Network_Time_Protocol">NTP</a> (Mills, 1995) — standard for synchronizing clocks over the Internet.</p>
+<ul>
+<li>Hierarchical <em>strata</em>: stratum-0 reference clocks → stratum-1 servers → … → clients.</li>
+<li>Estimates <strong>offset</strong> and <strong>round-trip delay</strong>; filters noisy samples; usually <em>slews</em> the OS clock.</li>
+<li>Typical accuracy: ms over WAN, µs–tens of µs on LAN (better with PTP/hardware timestamps).</li>
+</ul>
+<p>Below: two classic <em>master–client</em> schemes that motivate how physical sync works (and what bounds we can prove).</p>
+</section>
+<section id="activity" class="slide level1 activity">
+<h1>Activity</h1>
+<p><a href="https://github.com/wisaaco/AA_DistributedSystems_Lab/tree/main/U3-Clocks/NTP-demo">U3 github</a></p>
+<p>References:</p>
+<ul>
+<li><a href="https://ubuntu.com/server/docs/network-ntp">NTP</a></li>
+<li><a href="https://www.netburner.com/products/network-time-server/pk70-ex-ntp-network-time-server/">Some NTP devices with GPS</a></li>
+</ul>
+</section>
+<section id="protocol-1-broadcast-based-sync" class="slide level1">
+<h1>Protocol 1: broadcast-based sync</h1>
+<p>Assumptions: known lower bound <span class="math inline">\(\mathit{min}\)</span> on message delay; optional upper bound <span class="math inline">\(\mathit{max}\)</span>.</p>
+<ol type="1">
+<li>Master broadcasts its time <span class="math inline">\(t\)</span>.</li>
+<li>Client <span class="math inline">\(i\)</span> receives the message at local real time <span class="math inline">\(t'\)</span> and sets:</li>
+</ol>
+<p><span class="math display">\[C_i(t') := t + \mathit{min}\]</span></p>
+<p><strong>Why <span class="math inline">\(+\mathit{min}\)</span>?</strong> The message cannot arrive earlier than <span class="math inline">\(\mathit{min}\)</span>, so this never sets the client <em>ahead</em> of the master.</p>
+<p>If delay <span class="math inline">\(\in [\mathit{min},\mathit{max}]\)</span>, the error vs.&nbsp;the master is bounded by <span class="math inline">\(\mathit{max}-\mathit{min}\)</span> — and that bound is optimal for one-way broadcast.</p>
+</section>
+<section id="protocol-2-interrogation-based-sync" class="slide level1">
+<h1>Protocol 2: interrogation-based sync</h1>
+<p>Also called <strong>Cristian’s algorithm (1989)</strong> (request–reply):</p>
+<ol type="1">
+<li>Client sends a query at local time <span class="math inline">\(T_0\)</span>.</li>
+<li>Master replies with its time <span class="math inline">\(T_1\)</span>.</li>
+<li>Client receives the reply at local time <span class="math inline">\(T_2\)</span>.</li>
+</ol>
+<p>Round-trip time: <span class="math inline">\(RTT = T_2 - T_0\)</span>.<br>
+Best estimate of master time when the reply arrives (assuming symmetric delays):</p>
+<p><span class="math display">\[C_i(T_2) := T_1 + \frac{RTT}{2}\]</span></p>
+<p><strong>Error bound:</strong> at most <span class="math inline">\(RTT/2 - \mathit{min}\)</span> (worst case: all extra delay on one path).<br>
+Prefer samples with small <span class="math inline">\(RTT\)</span>; discard outliers - the same idea NTP uses with many probes.</p>
+<aside class="notes">
+<p>If delays are asymmetric, <span class="math inline">\(RTT/2\)</span> is only an estimate. NTP’s four-timestamp exchange and statistical filters improve robustness over the Internet.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="activity-cristian-in-the-sac-lab" class="slide level1 actividades">
+<h1>Activity: Cristian in the SAC lab</h1>
+<div class="columns">
+<div class="column" style="width:46%;">
+<p><strong>Ecosystem:</strong> WiFi <code>SAC</code> + 2 Raspberry Pis.</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Role</th>
+<th>Host</th>
+<th>User/pass</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Pi1</td>
+<td><code>192.168.0.102</code></td>
+<td><code>uib</code> / <code>hola</code></td>
+</tr>
+<tr class="even">
+<td>Pi2</td>
+<td><code>192.168.0.103</code></td>
+<td>idem</td>
+</tr>
+</tbody>
+</table>
+<p>As <em>client</em>, measure one interrogation against one-random raspberry:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href=""></a><span class="co"># Ti....</span></span>
+<span id="cb1-2"><a href=""></a><span class="fu">ssh</span> uib@192.168.0.102 </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>Your best <span class="math inline">\((T_0,T_1,T_2)\)</span>, <span class="math inline">\(RTT\)</span>, and <span class="math inline">\(C(T_2)\)</span>.</li>
+<li>Estimated max error for that sample.</li>
+<li>Detected issues??</li>
+</ul>
+</div><div class="column" style="width:54%;">
+<p><img data-src="../../images/04/cristian-lab.png" alt="WiFi SAC"></p>
+</div></div>
+</section>
+<section id="logical-clocks" class="slide level1">
+<h1>Logical Clocks</h1>
+<div class="columns">
+<div class="column" style="width:46%;">
+<p><span class="citation" data-cites="lamport1978time">(<a href="#/referencias" role="doc-biblioref" onclick="">Lamport 1978</a>)</span> <img data-src="../../images/04/paperLeslie.png" alt="Paper Leslie Clocks"></p>
+</div><div class="column" style="width:54%;">
+<ul>
+<li>Most coordination tasks in DS (e.g., for mutual exclusion, barriers, complete event log) doesn’t require a global notion of real time!</li>
+<li>Only needs a <strong>global order of discrete events</strong>: i.e, in the distributed debugging example, you only need order between dependent events that could possibly have caused the failure.</li>
+</ul>
+<p>Lamport posited two requirements for logical clocks:</p>
+<ul>
+<li>They must preserve <strong>program order</strong> (i.e., the order of events in one process needs to be preserved by the logical clock)</li>
+<li>They must preserve <strong>message order</strong> (i.e., a message sent event always needs to precede that message’s receipt event in the logical clock).</li>
+</ul>
+<p>These two requirements capture all internal causality between any two events in the system</p>
+</div></div>
+</section>
+<section id="first-scenario-message-ordering" class="slide level1">
+<h1>First scenario: Message ordering</h1>
+
+<img data-src="../../images/04/message-ordering.png" alt="Space-time diagram 0" class="r-stretch"><div class="fragment fade-up">
+<p>Different processes may observe different delivery orders when sends are concurrent, and that can still be OK.</p>
+<p>Both messages are <strong>concurrent</strong></p>
+</div>
+</section>
+<section id="second-scenario-message-ordering" class="slide level1">
+<h1>Second scenario: Message ordering</h1>
+
+<img data-src="../../images/04/message-ordering_casual.png" alt="Space-time diagram 1" class="r-stretch"><div class="fragment fade-up">
+<p><strong>Casual Ordering</strong></p>
+<ul>
+<li><p><span class="math inline">\(m_1\)</span> is causally dependent on the receipt of <span class="math inline">\(m_0\)</span></p></li>
+<li><p><span class="math inline">\(m_1\)</span> must be delivered only after <span class="math inline">\(m_0\)</span> has been delivered</p></li>
+</ul>
+</div>
+</section>
+<section id="lamport-formalization" class="slide level1">
+<h1>Lamport formalization</h1>
+<ul>
+<li><span class="math inline">\(a\)</span> sends a message, <span class="math inline">\(b\)</span> receives it: send(<span class="math inline">\(m\)</span>) <span class="math inline">\(\Rightarrow\)</span> receive(<span class="math inline">\(m\)</span>)</li>
+<li><span class="math inline">\(e\)</span> <span class="math inline">\(\Rightarrow\)</span> <span class="math inline">\(e'\)</span> means event <span class="math inline">\(e\)</span> happened before event <span class="math inline">\(e’\)</span></li>
+<li>Transitive: if <span class="math inline">\(e\)</span> <span class="math inline">\(\Rightarrow\)</span> <span class="math inline">\(e'\)</span> and <span class="math inline">\(e'\)</span> <span class="math inline">\(\Rightarrow\)</span> <span class="math inline">\(e''\)</span> then <span class="math inline">\(e\)</span> <span class="math inline">\(\Rightarrow\)</span> <span class="math inline">\(e''\)</span></li>
+</ul>
+<p>Thus, we can define sequence of events.</p>
+<ul>
+<li><p>Lamport’s happened-before (<span class="math inline">\(\Rightarrow\)</span>) is only a <strong>partial</strong> order. <strong>Motive:</strong> in a distributed system there is no global real-time order we can observe. We can only relate events that are <em>causally connected</em> (same process, or send/receive, or a transitive chain).</p>
+<ul>
+<li>If <span class="math inline">\(a \Rightarrow e\)</span> or <span class="math inline">\(e \Rightarrow a\)</span>, the pair is ordered.</li>
+<li>If neither holds (<span class="math inline">\(a \not\Rightarrow e \;\land\; e \not\Rightarrow a\)</span>), <span class="math inline">\(a \parallel e\)</span>: both orders are consistent with causality. Then, <span class="math inline">\(a\)</span> and <span class="math inline">\(e\)</span> are <strong>concurrent</strong></li>
+</ul></li>
+<li><p>So <span class="math inline">\(\Rightarrow\)</span> deliberately leaves some pairs <strong>incomparable</strong>.</p></li>
+</ul>
+</section>
+<section id="lamport-logical-clocks" class="slide level1">
+<h1>Lamport logical Clocks</h1>
+<blockquote>
+<p>A Lamport logical clock is a monotonically increasing software counter; its value need not match any physical clock.</p>
+</blockquote>
+<p>Each process <span class="math inline">\(i\)</span> keeps a counter <span class="math inline">\(C_i\)</span>. Stamp every event <span class="math inline">\(e\)</span> with <span class="math inline">\(C(e)\)</span>:</p>
+<ol type="1">
+<li><strong>Local / send event:</strong> <span class="math inline">\(C_i \leftarrow C_i + 1\)</span>; if <strong>sending</strong>, attach <span class="math inline">\(C_i\)</span> to the message.</li>
+<li><strong>Receive</strong> message stamped <span class="math inline">\(T\)</span>: <span class="math inline">\(C_i \leftarrow \max(C_i, T) + 1\)</span>.</li>
+</ol>
+<p><strong>Clock condition</strong> (correctness):</p>
+<p><span class="math display">\[e \Rightarrow e' \;\Longrightarrow\; C(e) &lt; C(e')\]</span></p>
+<p>So causality is reflected in timestamps. The converse is <em>false</em>: <span class="math inline">\(C(e) &lt; C(e')\)</span> does <strong>not</strong> imply <span class="math inline">\(e \Rightarrow e'\)</span> (they may be concurrent).</p>
+</section>
+<section id="pre--lamport-logical-clocks-example" class="slide level1">
+<h1><strong>PRE-</strong> Lamport logical Clocks: example</h1>
+
+<img data-src="../../images/04/lamport-example.png" alt="Space-time diagram with events a-k and local time-unit stamps on P1, P2, P3" class="r-stretch"><ul>
+<li><span class="math inline">\(e \Rightarrow h\)</span> then <span class="math inline">\(C(e) &lt; C(h)\)</span>, but <span class="math inline">\(C(e)=5 &gt;= C(h)=2\)</span></li>
+<li><span class="math inline">\(f \Rightarrow k\)</span> then <span class="math inline">\(C(f) &lt; C(k)\)</span>, but <span class="math inline">\(C(f)=6 &gt;= C(k)=2\)</span></li>
+</ul>
+</section>
+<section id="with--lamport-logical-clocks-example" class="slide level1">
+<h1><strong>With-</strong> Lamport logical Clocks: example</h1>
+
+<img data-src="../../images/04/lamport-example2.png" alt="Space-time diagram with events a-k and local time-unit stamps on P1, P2, P3" class="r-stretch"><ul>
+<li><span class="math inline">\(e \Rightarrow h\)</span> then <span class="math inline">\(C(e) &lt; C(h)\)</span>, <span class="math inline">\(C(e)=5 &lt; C(h)=6\)</span></li>
+<li><span class="math inline">\(f \Rightarrow k\)</span> then <span class="math inline">\(C(f) &lt; C(k)\)</span>, <span class="math inline">\(C(f)=6 &lt; C(k)=7\)</span></li>
+</ul>
+</section>
+<section id="activity-1" class="slide level1 activity">
+<h1>Activity</h1>
+<p>Identify the concurrent events</p>
+
+<img data-src="../../images/04/lamport-example2.png" alt="Space-time diagram with events a-k and local time-unit stamps on P1, P2, P3" class="r-stretch"></section>
+<section id="partial-vs-total-ordering" class="slide level1">
+<h1>Partial vs Total ordering</h1>
+<p>Let <span class="math inline">\(\le\)</span> be a binary relation on a set <span class="math inline">\(X\)</span> of events.</p>
+<p><strong>Common properties</strong> (both orders):</p>
+<ul>
+<li><em>Reflexive:</em> <span class="math inline">\(a \le a\)</span></li>
+<li><em>Antisymmetric:</em> <span class="math inline">\(a \le b \;\land\; b \le a \;\Rightarrow\; a = b\)</span></li>
+<li><em>Transitive:</em> <span class="math inline">\(a \le b \;\land\; b \le c \;\Rightarrow\; a \le c\)</span></li>
+</ul>
+<p><strong>Partial order</strong> (poset): the three properties above.<br>
+Some pairs may be <strong>incomparable</strong>: neither <span class="math inline">\(a \le b\)</span> nor <span class="math inline">\(b \le a\)</span><br>
+(e.g.&nbsp;Lamport’s <span class="math inline">\(\Rightarrow\)</span>; concurrent events <span class="math inline">\(a \parallel e\)</span>; <a href="https://dev.to/ganesh-kumar/from-commits-to-dags-how-git-uses-a-dag-to-track-your-code-history-1p1j">Git commit DAG</a> / branches).</p>
+<p><strong>Total order:</strong> a partial order that is also <em>total</em>:</p>
+<p><span class="math display">\[\forall a,b \in X:\quad a \le b \;\lor\; b \le a\]</span></p>
+<p>Every pair is comparable. One agreed sequence.</p>
+</section>
+<section id="activity-2" class="slide level1 activity">
+<h1>Activity</h1>
+<p><strong>Which requires a total ordering solution?</strong></p>
+<div class="fragment fade-up">
+<ul>
+<li>Locking</li>
+<li>Consensus protocol</li>
+<li>Transactions</li>
+</ul>
+</div>
+<p><strong>And, how we can choose between <span class="math inline">\(a\)</span> or <span class="math inline">\(b\)</span> when <span class="math inline">\(a \parallel b\)</span>?</strong></p>
+</section>
+<section id="lamports-totally-ordered-logical-clocks" class="slide level1">
+<h1>Lamport’s totally ordered logical clocks</h1>
+<p>Lamport timestamps <span class="math inline">\(C(e)\)</span> alone are <strong>not</strong> unique: concurrent events may share the same value, so they do not yet give a total order.</p>
+<p>Extend each stamp with the process identity. For an event on process <span class="math inline">\(i\)</span>:</p>
+<p><span class="math display">\[\tau(e) \;=\; \bigl(C(e),\, i\bigr)\]</span></p>
+<ul>
+<li><span class="math inline">\(C(e)\)</span> — local Lamport clock (as before)</li>
+<li><span class="math inline">\(i\)</span> — globally unique process id (e.g.&nbsp;host address + PID)</li>
+</ul>
+<p><strong>Total order</strong> on stamps (tie-break by process id):</p>
+<p><span class="math display">\[
+\tau(e) &lt; \tau(e')
+\;\iff\;
+C(e) &lt; C(e')
+\;\lor\;
+\bigl(C(e)=C(e') \;\land\; i &lt; j\bigr)
+\]</span></p>
+<p>where <span class="math inline">\(e\)</span> occurred at process <span class="math inline">\(i\)</span> and <span class="math inline">\(e'\)</span> at process <span class="math inline">\(j\)</span>.</p>
+<p>This yields a total order that <strong>extends</strong> <span class="math inline">\(\Rightarrow\)</span>: if <span class="math inline">\(e \Rightarrow e'\)</span> then <span class="math inline">\(\tau(e) &lt; \tau(e')\)</span>. When <span class="math inline">\(a \parallel b\)</span>, the process id decides which comes first.</p>
+</section>
+<section id="total-order-lamport-logical-clocks-example" class="slide level1">
+<h1><strong>Total-order</strong> Lamport logical Clocks: example</h1>
+
+<img data-src="../../images/04/lamport-example3.png" alt="Space-time diagram with events a-k and local time-unit stamps on P1, P2, P3" class="r-stretch"><p><span class="math display">\[
+\tau(a) &lt; \tau(j)
+\;\iff\;
+C(e) &lt; C(j)
+\;\lor\;
+\bigl(C(e)=C(j) \;\land\; 1 &lt; 3\bigr)
+\]</span></p>
+</section>
+<section id="vector-clocks" class="slide level1">
+<h1>Vector Clocks</h1>
+
+<img data-src="../../images/04/lamport-limitation.png" alt="Lamport limitation: C(g)<C(b) but g and b are concurrent" class="r-stretch"><p>Vector clocks address a fundamental limit of Lamport clocks: <strong><span class="math inline">\(C(e)&lt;C(e')\)</span> does not tell you whether <span class="math inline">\(e\)</span> caused <span class="math inline">\(e'\)</span> or they are concurrent.</strong></p>
+<ul>
+<li><strong>Clock condition (one way):</strong> if <span class="math inline">\(e \Rightarrow e'\)</span> then <span class="math inline">\(C(e) &lt; C(e')\)</span>.</li>
+<li><strong>Converse is false:</strong> <span class="math inline">\(C(e) &lt; C(e')\)</span> may hold while <span class="math inline">\(e \parallel e'\)</span> (as with <span class="math inline">\(g\)</span> and <span class="math inline">\(b\)</span> above).</li>
+</ul>
+<p>Lamport numbers only <em>respect</em> causality; they cannot <em>detect</em> concurrency. It is a artificial order total.</p>
+<p><strong>Vector clocks</strong> restore that distinction.</p>
+</section>
+<section id="vector-clocks-1" class="slide level1">
+<h1>Vector Clocks</h1>
+<p>Mattern (1989) <span class="citation" data-cites="mattern1989virtual">(<a href="#/referencias" role="doc-biblioref" onclick="">Mattern 1989</a>)</span> and Fidge (1991) <span class="citation" data-cites="fidge1991logical">(<a href="#/referencias" role="doc-biblioref" onclick="">Fidge 1991</a>)</span>: each process keeps an <span class="math inline">\(N\)</span>-vector that tracks <strong>causal history</strong> from every process: not a single counter!</p>
+<p>Let <span class="math inline">\(V_i\)</span> be the vector clock at process <span class="math inline">\(i\)</span> (<span class="math inline">\(i=1,\ldots,N\)</span>): multiples counters!</p>
+<p><strong>Pseudo-algorithm</strong></p>
+<ol type="1">
+<li><strong>Init:</strong> <span class="math inline">\(V_i[j] \leftarrow 0\)</span> for all <span class="math inline">\(j=1,\ldots,N\)</span>.</li>
+<li><strong>Local / before send:</strong> <span class="math inline">\(V_i[i] \leftarrow V_i[i] + 1\)</span>; stamp the event (and the message) with <span class="math inline">\(V_i\)</span>.</li>
+<li><strong>On receive</strong> of a message stamped <span class="math inline">\(V_m\)</span> at process <span class="math inline">\(j\)</span>: <span class="math display">\[V_j[k] \leftarrow \max\bigl(V_j[k],\, V_m[k]\bigr)\quad \forall k=1,\ldots,N\]</span> then <span class="math inline">\(V_j[j] \leftarrow V_j[j] + 1\)</span>.</li>
+</ol>
+<p><strong>Example</strong> (merge only, before the local <span class="math inline">\(+1\)</span>):</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: center;"><span class="math inline">\(P_1\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(P_2\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(P_3\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(P_4\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>received <span class="math inline">\(V_m\)</span></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td>local <span class="math inline">\(V_j\)</span></td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\max\)</span></td>
+<td style="text-align: center;"><strong>2</strong></td>
+<td style="text-align: center;"><strong>8</strong></td>
+<td style="text-align: center;"><strong>12</strong></td>
+<td style="text-align: center;"><strong>1</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Comparing events</strong> stamped <span class="math inline">\(V\)</span> and <span class="math inline">\(V'\)</span>:</p>
+<ul>
+<li><span class="math inline">\(V \le V'\)</span> iff <span class="math inline">\(\forall k:\ V[k] \le V'[k]\)</span>; and <span class="math inline">\(V &lt; V'\)</span> if also <span class="math inline">\(V \ne V'\)</span> <span class="math inline">\(\;\Rightarrow\;\)</span> causality (<span class="math inline">\(e \Rightarrow e'\)</span>).</li>
+<li>If neither <span class="math inline">\(V &lt; V'\)</span> nor <span class="math inline">\(V' &lt; V\)</span>, then the events are <strong>concurrent</strong> (<span class="math inline">\(e \parallel e'\)</span>).</li>
+</ul>
+</section>
+<section id="activity-3" class="slide level1 activity">
+<h1>Activity</h1>
+<p>Vector Clock Scenario (<em>our task</em>)</p>
+
+<img data-src="../../images/04/vectorclock.png" alt="Vector clock scenario" class="r-stretch"><ul>
+<li>Identify concurrent messages.</li>
+</ul>
+</section>
+<section id="activity-4" class="slide level1 activity">
+<h1>Activity</h1>
+<p>Vector Clock Scenario (<em>your activity</em>)</p>
+
+<img data-src="../../images/04/vectorclock2.png" alt="Vector clock scenario" class="r-stretch"><ul>
+<li>Identify concurrent messages.</li>
+</ul>
+</section>
+<section id="activity-5" class="slide level1 activity">
+<h1>Activity</h1>
+<p>Vector Clock Scenario (<em>your activity</em>)</p>
+
+<img data-src="../../images/04/vectorclock3.png" alt="Vector clock scenario" class="r-stretch"><ul>
+<li>Identify concurrent messages.</li>
+</ul>
+</section>
+<section id="vector-clocks-limitations" class="slide level1">
+<h1>Vector Clocks Limitations</h1>
+<ul>
+<li>The size of the vector increases with more actors and the entire vector must be stored with the data</li>
+<li>Comparison takes more time than comparing two numbers</li>
+<li>What if messages are concurrent? App will have to decide how to handle conflicts.</li>
+</ul>
+</section>
+<section id="referencias" class="slide level1 allowframebreaks smaller scrollable">
+<h1>Referencias</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-fidge1991logical" class="csl-entry" role="listitem">
+Fidge, Colin J. 1991. <span>“Logical Time in Distributed Computing Systems.”</span> <em>Computer</em> 24 (8): 11–16.
+</div>
+<div id="ref-lamport1978time" class="csl-entry" role="listitem">
+Lamport, Leslie. 1978. <span>“Time, Clocks, and the Ordering of Events in a Distributed System.”</span> <em>Communications of the ACM</em> (New York, NY, USA) 21 (7): 558–65. <a href="https://doi.org/10.1145/359545.359563">https://doi.org/10.1145/359545.359563</a>.
+</div>
+<div id="ref-mattern1989virtual" class="csl-entry" role="listitem">
+Mattern, Friedemann. 1989. <span>“Virtual Time and Global States of Distributed Systems.”</span> <em>Proceedings of the International Workshop on Parallel and Distributed Algorithms</em>, 215–26.
+</div>
+</div>
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="tema-04-clocks_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="tema-04-clocks_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="tema-04-clocks_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="tema-04-clocks_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="tema-04-clocks_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="tema-04-clocks_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="tema-04-clocks_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="tema-04-clocks_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="tema-04-clocks_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="tema-04-clocks_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': false,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1600,
+
+        height: 900,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 1.0e-2,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script>
+    (() => {
+      const AI_MODE_URL = "https://www.google.com/aimode";
+      const TOAST_ID = "ai-mode-toast";
+
+      function findTrigger(target) {
+        return target.closest(".ai-mode-button");
+      }
+
+      function normalizeTriggers() {
+        document.querySelectorAll("a.ai-mode-button[href]").forEach((anchor) => {
+          anchor.removeAttribute("href");
+        });
+      }
+
+      function platformPasteShortcut() {
+        const platform = navigator.userAgentData?.platform || navigator.platform || "";
+        return /mac|iphone|ipad/i.test(platform) ? "Cmd+V" : "Ctrl+V";
+      }
+
+      function readPrompt(button) {
+        const attributePrompt = button.getAttribute("data-ai-prompt");
+        if (attributePrompt && attributePrompt.trim()) {
+          return attributePrompt.trim();
+        }
+
+        const container = button.closest(".ai-mode-launcher");
+        if (!container) {
+          return "";
+        }
+
+        const promptNode = container.querySelector(
+          "template.ai-mode-prompt, script.ai-mode-prompt[type='text/plain'], textarea.ai-mode-prompt"
+        );
+
+        if (!promptNode) {
+          return "";
+        }
+
+        if (promptNode.tagName === "TEMPLATE" && promptNode.content) {
+          return (promptNode.content.textContent || "").trim();
+        }
+
+        if ("value" in promptNode) {
+          return promptNode.value.trim();
+        }
+
+        return (promptNode.textContent || promptNode.innerHTML || "").trim();
+      }
+
+      function showToast(message, isError = false) {
+        let toast = document.getElementById(TOAST_ID);
+
+        if (!toast) {
+          toast = document.createElement("div");
+          toast.id = TOAST_ID;
+          toast.className = "ai-mode-toast";
+          document.body.appendChild(toast);
+        }
+
+        toast.textContent = message;
+        toast.dataset.state = isError ? "error" : "ok";
+        toast.classList.add("is-visible");
+
+        window.clearTimeout(showToast.timeoutId);
+        showToast.timeoutId = window.setTimeout(() => {
+          toast.classList.remove("is-visible");
+        }, 4200);
+      }
+
+      async function launchAiMode(button) {
+        const prompt = readPrompt(button);
+        if (!prompt) {
+          showToast("Este botón no tiene ningún prompt asociado.", true);
+          return;
+        }
+
+        const popup = window.open(AI_MODE_URL, "_blank", "noopener,noreferrer");
+        let copied = false;
+
+        try {
+          await navigator.clipboard.writeText(prompt);
+          copied = true;
+        } catch (error) {
+          copied = false;
+        }
+
+        if (popup) {
+          popup.focus();
+        }
+
+        if (copied) {
+          showToast(
+            `Google AI Mode abierto. El prompt ya está en el portapapeles: pega con ${platformPasteShortcut()}.`
+          );
+          return;
+        }
+
+        showToast(
+          `Google AI Mode abierto, pero el navegador no permitió copiar el prompt. Se mostrará para copiarlo manualmente.`,
+          true
+        );
+        window.prompt("Copia este prompt y pégalo en Google AI Mode:", prompt);
+      }
+
+      function handleActivation(event) {
+        const button = findTrigger(event.target);
+        if (!button) {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        launchAiMode(button);
+      }
+
+      document.addEventListener("click", handleActivation, true);
+
+      document.addEventListener(
+        "keydown",
+        (event) => {
+          const button = findTrigger(event.target);
+          if (!button) {
+            return;
+          }
+
+          if (event.key !== "Enter" && event.key !== " ") {
+            return;
+          }
+
+          handleActivation(event);
+        },
+        true
+      );
+
+      normalizeTriggers();
+    })();
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
