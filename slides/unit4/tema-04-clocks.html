@@ -278,23 +278,6 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="events" class="slide level1">
-<h1>Events</h1>
-<p><strong>The important thing in a log is the order, not the time.</strong></p>
-<p><strong>Partial ordering</strong> (happened-before, <span class="math inline">\(\to\)</span>):</p>
-<ul>
-<li>Relates events only when there is a causal dependence.</li>
-<li>Defined by: (1) same process, <span class="math inline">\(e\)</span> before <span class="math inline">\(e'\)</span> <span class="math inline">\(\Rightarrow\)</span> <span class="math inline">\(e \to e'\)</span>; (2) send before corresponding receive; (3) transitivity.</li>
-<li>Some events are <em>concurrent</em>: neither <span class="math inline">\(e \to e'\)</span> nor <span class="math inline">\(e' \to e\)</span> (no causal path).</li>
-<li>Logical / vector clocks capture this order.</li>
-</ul>
-<p><strong>Total ordering</strong>:</p>
-<ul>
-<li>Every pair of events is comparable: either <span class="math inline">\(e &lt; e'\)</span> or <span class="math inline">\(e' &lt; e\)</span>.</li>
-<li>Extends the partial order by breaking ties (e.g.&nbsp;Lamport timestamp + process id).</li>
-<li>Useful when the system needs a single agreed sequence of events (global log, mutual exclusion, totally ordered multicast).</li>
-</ul>
-</section>
 <section id="physical-clocks-sync-goals" class="slide level1">
 <h1>Physical clocks: sync goals</h1>
 <p>Two related goals (let <span class="math inline">\(C_i(t)\)</span> be the software clock of process <span class="math inline">\(i\)</span>, and <span class="math inline">\(t\)</span> real time):</p>
