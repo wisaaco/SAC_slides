@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="tema-06-coordination-em_files/libs/clipboard/clipboard.min.js"></script>
+<script src="tema-06-coordination-em_files/libs/quarto-html/tabby.min.js"></script>
+<script src="tema-06-coordination-em_files/libs/quarto-html/popper.min.js"></script>
+<script src="tema-06-coordination-em_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="tema-06-coordination-em_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="tema-06-coordination-em_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="tema-06-coordination-em_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.37">
+
+  <title>Tema 5. Coordination: Distributed Mutual Exclusion</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="tema-06-coordination-em_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="tema-06-coordination-em_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="tema-06-coordination-em_files/libs/revealjs/dist/theme/quarto-0427d8d92a431aa6a6430e53ec02a470.css">
+  <link rel="stylesheet" href="slides.css">
+  <link href="tema-06-coordination-em_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="tema-06-coordination-em_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="tema-06-coordination-em_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="tema-06-coordination-em_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Tema 5. Coordination: Distributed Mutual Exclusion</h1>
+  <p class="subtitle">Sistemas Actuales de Computación</p>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="activity" class="slide level1 activity">
+<h1>Activity</h1>
+<div class="columns">
+<div class="column" style="width:46%;">
+<pre><code>U5-Coordination/WithOutCoordination
+├── README.md
+├── server.py
+└── client.py</code></pre>
+</div><div class="column" style="width:54%;">
+<ul>
+<li>Is Lock-control distributed?</li>
+</ul>
+</div></div>
+</section>
+<section id="three-coordination-types-mutual-exclusion" class="slide level1">
+<h1>Three coordination types: Mutual Exclusion</h1>
+<ul>
+<li>System A: Send message to DB : count = count / 1.21</li>
+<li>System b: Send message to DB : count = count * 1.21</li>
+<li>System BD: Count?</li>
+</ul>
+</section>
+<section id="three-coordination-types-two-phase-commit-2pc-or-three-phase-commit-3pc" class="slide level1">
+<h1>Three coordination types:: Two-phase Commit (2PC) or Three-phase Commit (3PC)</h1>
+<ul>
+<li>System A: Payment OK!</li>
+<li>System b: Stock Fail!</li>
+<li>System c: Sell item?</li>
+</ul>
+</section>
+<section id="three-coordination-types-bully-ring-or-raft" class="slide level1">
+<h1>Three coordination types: Bully, Ring or Raft</h1>
+<ul>
+<li>System A: I’m the coordinator!</li>
+<li>System b: I’m the coordinator!</li>
+<li>System c: Sell item?</li>
+</ul>
+</section>
+<section id="coordination" class="slide level1">
+<h1>Coordination</h1>
+<p>Techniques to coordinate actions and agree on shared value in Distributed Systems:</p>
+<ul>
+<li><strong>Atomic commitment</strong>: participants need to agree on a value, but they have specific constraints on whether they can accept any particular value. i.e.&nbsp;¿Quedamos?</li>
+<li><strong>Consensus</strong>: participants need to agree on a value, but they are willing and capable to accept any value. Ie. ¿Cuándo quedamos?</li>
+<li>Shared resource (<strong>critical section</strong>) may require exclusive access: Distributed mutual exclusion</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li>Update fields in database tables</li>
+<li>Modify a file</li>
+<li>Modify file contents that are replicated on multiple servers</li>
+</ul>
+<p>Distributed Mutual Exclusion:</p>
+<ul>
+<li>Easy, if the entire request is atomic</li>
+<li>Needs to be coordinated: if the requests comprises multiple messages or spans multiple systems.</li>
+</ul>
+</section>
+<section id="agreement-is-hard" class="slide level1">
+<h1>Agreement is <em>hard</em></h1>
+<p>In the asynchronous system model, it is impossible to guarantee agreement in finite time under all failure scenarios.</p>
+<p>The consensus problem can be approached in practice: there exist protocols to solve consensus under vast majority of plausible failure scenarios.</p>
+<p>That’s not the case for atomic commitment: if each participant has their own constraints, then you can’t tolerate any one participant’s failure.</p>
+<p>In that sense, <strong>atomic</strong> commitment is <em>even harder</em> than <strong>consensus</strong>.</p>
+</section>
+<section id="consensus" class="slide level1">
+<h1>Consensus</h1>
+<p>Three requirements for a solution: - consistency: once a value is chosen, the chosen value of all working processes is the same. - termination: eventually they agree on a value (a.k.a., a value is “chosen”). - validity: the chosen value was proposed by one of the nodes.</p>
+<p>But there are failures:</p>
+<ul>
+<li>Crash failure: a node does not reply</li>
+<li>Omission failures: some lost messages (solution: Paxos / Raft)</li>
+<li>Byzantine failures: arbitrary behaviour of a node (solution: Practical Byzantine Fault Tolerance (PBFT) <span class="citation" data-cites="Castro1999PracticalBF">(<a href="#/referencias" role="doc-biblioref" onclick="">Castro and Liskov 1999</a>)</span> / Tendermint)</li>
+</ul>
+<p>Requirements for a solution:</p>
+<ul>
+<li><strong>Consistency</strong>: both <em>armies</em> decide to attack at the same time.</li>
+<li><strong>Termination</strong>: each <em>army</em> decides to attack after a finite number of messages.</li>
+<li><strong>Validity</strong>: the time to attack was proposed by one of the <em>armies</em>.</li>
+</ul>
+</section>
+<section id="remembering-the-byzantine-problem" class="slide level1">
+<h1>Remembering the Byzantine problem</h1>
+<p>Several generals must agree on one plan: <strong>attack</strong> or <strong>retreat</strong> <span class="citation" data-cites="Lamport1982Byzantine">(<a href="#/referencias" role="doc-biblioref" onclick="">Lamport et al. 1982</a>)</span>. They only communicate by messenger. Some generals are traitors.</p>
+<p>A traitor can send <em>attack</em> to one loyal general and <em>retreat</em> to another. The loyal ones still have to:</p>
+<ul>
+<li><strong>Consistency:</strong> all of them adopt the same plan</li>
+<li><strong>Validity:</strong> if the commander is loyal, that plan is the commander’s order</li>
+</ul>
+<p>With oral messages, three generals cannot tolerate one traitor. Each loyal lieutenant hears a different order and cannot tell who lied. The bound is the one PBFT uses next: <span class="math inline">\(n \ge 3f + 1\)</span> loyal and traitor generals to cope with <span class="math inline">\(f\)</span> traitors.</p>
+<p>A crash only goes silent. A Byzantine node can lie, and can lie differently to each peer.</p>
+</section>
+<section id="lamports-solution-n-ge-3f-1" class="slide level1">
+<h1>Lamport’s solution: <span class="math inline">\(n \ge 3f + 1\)</span></h1>
+<p>Oral messages: delivery is reliable, the receiver knows the sender, and silence is detectable <span class="citation" data-cites="Lamport1982Byzantine">(<a href="#/referencias" role="doc-biblioref" onclick="">Lamport et al. 1982</a>)</span>. A traitor may still say anything.</p>
+<p>For one traitor, four generals suffice. The commander sends an order. Each lieutenant then tells the others what he heard, and every loyal lieutenant decides by <strong>majority</strong>.</p>
+<ul>
+<li>The commander is loyal and one lieutenant lies. A loyal lieutenant collects the true order twice and the lie once. Majority recovers the order.</li>
+<li>The commander is the traitor. The lieutenants are loyal, so they all assemble the same vector of received orders and the majority is the same plan. A tie defaults to retreat.</li>
+</ul>
+<p>For <span class="math inline">\(f\)</span> traitors that exchange is repeated <span class="math inline">\(f\)</span> times. Reporting what you were told is a smaller Byzantine agreement, with one traitor fewer. Each level needs three voices for every traitor, so <span class="math inline">\(n \ge 3f + 1\)</span> throughout.</p>
+</section>
+<section id="practical-byzantine-fault-tolerance-pbft" class="slide level1">
+<h1>Practical Byzantine Fault Tolerance (PBFT)</h1>
+<p>Consensus when replicas may <strong>lie</strong>, not only crash <span class="citation" data-cites="Castro1999PracticalBF">(<a href="#/referencias" role="doc-biblioref" onclick="">Castro and Liskov 1999</a>)</span>. Paxos and Raft are no longer safe under that fault.</p>
+<ul>
+<li>Tolerates <span class="math inline">\(f\)</span> Byzantine replicas if <span class="math inline">\(n = 3f + 1\)</span></li>
+<li>A decision needs a quorum of <span class="math inline">\(2f + 1\)</span>. Any two quorums share at least one correct replica, so they cannot commit two different values</li>
+<li>A <strong>primary</strong> assigns the order. The other replicas audit it</li>
+</ul>
+<p>One client request, three rounds:</p>
+<ol type="1">
+<li><strong>Pre-prepare.</strong> The primary proposes a sequence number</li>
+<li><strong>Prepare.</strong> <span class="math inline">\(2f\)</span> matching prepares: the replica agrees on that order</li>
+<li><strong>Commit.</strong> <span class="math inline">\(2f + 1\)</span> commits: enough correct replicas will execute it</li>
+</ol>
+<p>The client accepts the answer when <span class="math inline">\(f + 1\)</span> replies match. If the primary is silent or contradicts itself, a <strong>view change</strong> elects another and keeps requests that were already prepared. Termination still needs partial synchrony: eventually, messages arrive before the timeout.</p>
+</section>
+<section id="practical-byzantine-fault-tolerance-pbft-1" class="slide level1">
+<h1>Practical Byzantine Fault Tolerance (PBFT)</h1>
+
+<img data-src="../../images/06/pbft.png" alt="PBFT diagram" class="r-stretch"></section>
+<section id="tendermint" class="slide level1">
+<h1>Tendermint</h1>
+<p>The same Byzantine quorum, used to agree on the <strong>next block</strong> of a chain <span class="citation" data-cites="Buchman2018Tendermint">(<a href="#/referencias" role="doc-biblioref" onclick="">Buchman et al. 2018</a>)</span>. Validators may have weighted votes, and the set of validators is known. A committed block is final: a longer chain does not replace it.</p>
+<p>Each height proceeds in rounds, and each round has a proposer.</p>
+<ol type="1">
+<li><strong>Propose.</strong> The proposer broadcasts a block. If it is locked on an earlier block, it must propose that one</li>
+<li><strong>Prevote.</strong> Validators vote for that block, or for nil</li>
+<li><strong>Precommit.</strong> A validator that sees <span class="math inline">\(2f + 1\)</span> prevotes for the same block precommits it and <strong>locks</strong> on it</li>
+</ol>
+<p><span class="math inline">\(2f + 1\)</span> precommits commit the block, and the height advances. Otherwise the round times out and the next proposer tries. The lock is the safety argument across rounds: after precommitting, a correct validator does not vote for a conflicting block.</p>
+<p>Where PBFT keeps one primary to order client operations, Tendermint rotates the proposer, and the value agreed on is a block in a log.</p>
+</section>
+<section id="distributed-mutual-exclusion" class="slide level1">
+<h1>Distributed Mutual Exclusion</h1>
+<p>Create an algorithm to allow a process to request and obtain exclusive access to a resource that is available on the network</p>
+<p>Required properties:</p>
+<ul>
+<li><strong>Safety</strong>: at any instant, only one process may hold the resource</li>
+<li><strong>Liveness</strong>: every request is eventually granted</li>
+</ul>
+<p>Also desired:</p>
+<ul>
+<li><strong>Fairness</strong>: each process gets a fair chance to hold the resource: bounded waiting and in-order service</li>
+</ul>
+<p>Liveness and fairness hold only under the assumptions on the next slide. A holder that never releases the resource, or a process that stops answering, blocks the rest.</p>
+</section>
+<section id="distributed-mutual-exclusion-assumptions" class="slide level1">
+<h1>Distributed Mutual Exclusion: Assumptions</h1>
+<p>These are the hypotheses of the basic algorithms (Lamport, Ricart-Agrawala), not properties of a real network.</p>
+<ul>
+<li><strong>Resource name.</strong> Processes agree on how a resource is identified and pass that name in the request: <em>request(Resource)</em>.</li>
+<li><strong>Process identity.</strong> Every process has a unique id. It breaks ties between requests that carry the same logical time.</li>
+<li><strong>Known group.</strong> The set of processes that share the resource is finite and known. Each request is sent to all of them.</li>
+<li><strong>Reliable channels.</strong> Messages between a pair are eventually delivered, in send order. Retransmission builds that channel; it is not part of the exclusion algorithm.</li>
+<li><strong>No failures.</strong> Processes do not crash and do not stop replying. If the holder dies, or a reply never comes, the others wait forever. Leases, failure detection, or a new coordinator are a different algorithm, and safety is no longer free.</li>
+<li><strong>Release.</strong> A process that holds the resource eventually releases it.</li>
+<li><strong>Asynchrony.</strong> There is no bound on message delay or on process speed. A timeout cannot tell a crash from a slow process, so these algorithms do not use one. They rely on every process eventually answering. Granting the resource because a timeout expired can give it to two processes and break safety.</li>
+</ul>
+</section>
+<section id="performance-metrics" class="slide level1">
+<h1>Performance metrics</h1>
+<p>The performance is generally measured by the following four metrics:</p>
+<ul>
+<li><strong>Message complexity</strong>: The number of messages required per Critical Section (CS) execution by a system.</li>
+<li><strong>Synchronization delay</strong>: After a system leaves the CS, it is the time required and before the next system enters the CS</li>
+<li><strong>Response time</strong>: The time interval a request waits for its CS execution to be over after its request messages have been sent out</li>
+<li><strong>System throughput</strong>. The rate at which the system executes requests for the CS</li>
+</ul>
+<p><span class="math display">\[
+X_{System} = \frac{1}{Delay+CS_{Duration}}
+\]</span></p>
+</section>
+<section id="types-of-mutual-exclusion-algorithms" class="slide level1">
+<h1>Types of mutual exclusion algorithms</h1>
+<ul>
+<li><strong>Centralized</strong>. A process can access a resource because a central coordinator allowed it to do so.</li>
+<li><strong>Token-based</strong>. A process can access a resource if it is holding a token permitting it to do so.</li>
+<li><strong>Contention-based / Quorum-based</strong>. A process can access a resource via distributed agreement.</li>
+</ul>
+</section>
+<section id="centralized-algorithms" class="slide level1">
+<h1>Centralized algorithms</h1>
+<ul>
+<li><p>Mimic single processor system</p></li>
+<li><p>One process elected as coordinator (<em>Leader</em> election problem):</p>
+<ol type="1">
+<li><span class="text-green"><strong>Request</strong></span> resource</li>
+<li>Wait for response</li>
+<li><span class="text-green"><strong>Receive</strong></span> grant</li>
+<li>Access resource</li>
+<li><span class="text-green"><strong>Release</strong></span> resource</li>
+</ol></li>
+</ul>
+<p>If another process claimed resource:</p>
+<ul>
+<li>Coordinator does not replay until release- Maintain queue: service requests in FIFO order</li>
+</ul>
+</section>
+<section id="centralized-algorithms-1" class="slide level1">
+<h1>Centralized algorithms</h1>
+<p>Benefits:</p>
+<ul>
+<li>Fair: all requests processed in order</li>
+<li>Easy to implement, understand, verify</li>
+<li>Processes do not need to know group members</li>
+<li>Efficiency: 2 messages to enter, 1 message to exit</li>
+</ul>
+<p>Problems:</p>
+<ul>
+<li>Process cannot distinguish being blocked from a dead coordinator</li>
+<li>single point of failure</li>
+<li>Centralized server can be a bottleneck</li>
+</ul>
+</section>
+<section id="token-ring-algorithms" class="slide level1">
+<h1>Token Ring algorithms</h1>
+<div class="columns">
+<div class="column" style="width:46%;">
+<p>Assume known group of processes</p>
+<ul>
+<li>Some ordering can be imposed on group (unique process IDs)</li>
+<li>Construct logical ring in software</li>
+<li>Process communicates with its neighbour</li>
+</ul>
+</div><div class="column" style="width:54%;">
+<p><img data-src="../../images/06/tokenring.png" alt="Token ring diagram"></p>
+</div></div>
+</section>
+<section id="token-ring-algorithms-1" class="slide level1">
+<h1>Token Ring algorithms</h1>
+<p><span class="text-green"><strong>Safety</strong></span>:</p>
+<ul>
+<li>Only one process at a time has token. Mutual exclusion guaranteed.</li>
+</ul>
+<p><span class="text-green"><strong>Liveness</strong></span>:</p>
+<ul>
+<li>Order well-defined. Starvation cannot occur. Lack of FCFS ordering may be undesirable sometimes.</li>
+</ul>
+<p><span class="text-green"><strong>Delay</strong></span>:</p>
+<ul>
+<li>Request = 0..N-1 messages</li>
+<li>Release = 1 message</li>
+</ul>
+<p><span class="text-red"><strong>Problems</strong></span>:</p>
+<ul>
+<li>Constant activity</li>
+<li>Token loss (e.g.&nbsp;process died)</li>
+<li>Process loss (neighbour disappears)</li>
+<li>Total Casual-ordered requests to entry to the CS</li>
+</ul>
+</section>
+<section id="types-of-mutual-exclusion-algorithms-1" class="slide level1">
+<h1>Types of mutual exclusion algorithms</h1>
+<ul>
+<li><strong>Centralized</strong>. A process can access a resource because a central coordinator allowed it to do so.</li>
+<li><strong>Token-based</strong>. A process can access a resource if it is holding a token permitting it to do so.</li>
+<li><strong>Contention-based / Quorum-based</strong>. A process can access a resource via distributed agreement.</li>
+</ul>
+</section>
+<section id="contention-based" class="slide level1">
+<h1>Contention-based</h1>
+<p>A process can access a resource via distributed agreement</p>
+<ul>
+<li>Lamport’s mutual exclusion <span class="citation" data-cites="lamport1978time">(<a href="#/referencias" role="doc-biblioref" onclick="">Lamport 1978</a>)</span></li>
+<li>Ricart &amp; Agrawala algorithm <span class="citation" data-cites="ricart1981optimal">(<a href="#/referencias" role="doc-biblioref" onclick="">Ricart and Agrawala 1981</a>)</span></li>
+</ul>
+</section>
+<section id="lamports-mutual-exclusion" class="slide level1">
+<h1>Lamport’s mutual exclusion</h1>
+<p>Distributed algorithm: logical clocks and a request queue at every process <span class="citation" data-cites="lamport1978time">(<a href="#/referencias" role="doc-biblioref" onclick="">Lamport 1978</a>)</span>.</p>
+<ul>
+<li>Each message is sent to every other process, reliably, and FIFO from each sender</li>
+<li>The clock advances on send and on receive, so a reply is stamped later than the request it acknowledges</li>
+<li>The decision order is the pair <span class="math inline">\((T_i, i)\)</span>. The timestamp alone is not unique; the process id breaks ties. Every process compares those pairs the same way</li>
+<li>Each process keeps a queue of pending requests, sorted by <span class="math inline">\((T_i, i)\)</span></li>
+</ul>
+<p>The queues are not identical at every instant: a request still in transit is missing at some processes. The entry rule is what makes that safe.</p>
+</section>
+<section id="lamports-mutual-exclusion-1" class="slide level1">
+<h1>Lamport’s mutual exclusion</h1>
+<p><strong>First step: request the resource</strong></p>
+<ul>
+<li><span class="math inline">\(P_i\)</span> sends <span class="text-green"><strong>Request</strong> <span class="math inline">\((R, i, T_i)\)</span></span> to every other process, and puts that same request on its own queue</li>
+<li>When <span class="math inline">\(P_j\)</span> receives it, <span class="math inline">\(P_j\)</span> inserts the request in its queue and returns a timestamped <span class="text-green"><strong>Reply</strong> <span class="math inline">\((T_j)\)</span></span>, with <span class="math inline">\(T_j &gt; T_i\)</span></li>
+</ul>
+</section>
+<section id="lamports-mutual-exclusion-2" class="slide level1">
+<h1>Lamport’s mutual exclusion</h1>
+<p><strong>Second step: use the resource</strong></p>
+<p><span class="math inline">\(P_i\)</span> enters only when both conditions hold:</p>
+<ul>
+<li>A <span class="text-green"><strong>Reply</strong> <span class="math inline">\((T_j)\)</span></span> has arrived from every other <span class="math inline">\(P_j\)</span> with <span class="math inline">\(T_j &gt; T_i\)</span>. Because the channel is FIFO, no earlier request from <span class="math inline">\(P_j\)</span> is still on its way</li>
+<li><span class="math inline">\(P_i\)</span>’s own request is the earliest pair <span class="math inline">\((T_i, i)\)</span> in its queue</li>
+</ul>
+</section>
+<section id="lamports-mutual-exclusion-3" class="slide level1">
+<h1>Lamport’s mutual exclusion</h1>
+<p><strong>Third step: release the resource</strong></p>
+<ul>
+<li><span class="math inline">\(P_i\)</span> deletes its request from its own queue and sends <span class="text-green"><strong>Release</strong> <span class="math inline">\((i, T_i)\)</span></span> to every other process</li>
+<li>Each recipient deletes <span class="math inline">\(P_i\)</span>’s request from its queue</li>
+<li>A waiting process may then enter, but only if its request is now the earliest and it already has a later reply from everyone. Release removes the process ahead; it does not by itself grant the critical section</li>
+</ul>
+</section>
+<section id="lamports-mutual-exclusion-example" class="slide level1">
+<h1>Lamport’s mutual exclusion: example</h1>
+<p><span class="math inline">\(P_1\)</span> and <span class="math inline">\(P_2\)</span> both request at Lamport time 1. The pairs decide: <span class="math inline">\((1,1) &lt; (1,2)\)</span>, so <span class="math inline">\(P_1\)</span> enters first. <span class="math inline">\(P_3\)</span> only replies.</p>
+
+<img data-src="../../images/06/lamport-mutex.png" alt="Space-time diagram of Lamport mutual exclusion. P1 and P2 request at time 1. P1 enters, then releases, and P2 enters." class="r-stretch"><ul>
+<li><span class="math inline">\(P_1\)</span> enters at time 4: both replies are later than 1, and <span class="math inline">\((1,1)\)</span> is at the head of the queue</li>
+<li><span class="math inline">\(P_2\)</span> already has its replies, but <span class="math inline">\((1,2)\)</span> sits behind <span class="math inline">\((1,1)\)</span>. It enters at time 5, when <span class="math inline">\(P_1\)</span>’s release arrives</li>
+</ul>
+</section>
+<section id="lamports-mutual-exclusion-4" class="slide level1">
+<h1>Lamport’s mutual exclusion</h1>
+<p><span class="text-green"><strong>Safety</strong></span>: the pair <span class="math inline">\((T_i, i)\)</span> is one total order at every process. <span class="math inline">\(P_i\)</span> enters only after a later message from every peer, so any request that should come first is already in the queue, and <span class="math inline">\(P_i\)</span> is at the head.</p>
+<p><span class="text-green"><strong>Liveness</strong></span>: if nobody fails and every holder releases, the earliest request eventually has its replies and reaches the head. That request enters.</p>
+<p><span class="text-green"><strong>Fairness</strong></span>: requests are served in timestamp order, not in the order the network delivered them.</p>
+<p><span class="text-green"><strong>Delay</strong></span>: each execution sends <span class="math inline">\((N-1)\)</span> requests, <span class="math inline">\((N-1)\)</span> replies and <span class="math inline">\((N-1)\)</span> releases. Total: <span class="math inline">\(3(N-1)\)</span> messages.</p>
+<p><span class="text-red"><strong>Problems</strong></span>:</p>
+<ul>
+<li>Any silent process blocks entry: the algorithm waits for every peer</li>
+<li>Every request and every release is sent to the whole group</li>
+</ul>
+</section>
+<section id="ricart-agrawala-algorithm" class="slide level1">
+<h1>Ricart &amp; Agrawala algorithm</h1>
+<p>Same clocks and the same pair <span class="math inline">\((T_i, i)\)</span> as Lamport <span class="citation" data-cites="ricart1981optimal">(<a href="#/referencias" role="doc-biblioref" onclick="">Ricart and Agrawala 1981</a>)</span>. The release multicast disappears: permission is a reply, and a reply can be postponed.</p>
+<p>To enter the critical section, <span class="math inline">\(P_i\)</span>:</p>
+<ol type="1">
+<li>Sends <span class="text-green"><strong>Request</strong> <span class="math inline">\((R, i, T_i)\)</span></span> to every other process</li>
+<li>Waits until <span class="math inline">\((N-1)\)</span> replies have arrived</li>
+<li>Enters</li>
+</ol>
+<p>A peer does not always reply at once. It replies immediately only if it does not need the resource first.</p>
+</section>
+<section id="ricart-agrawala-algorithm-1" class="slide level1">
+<h1>Ricart &amp; Agrawala algorithm</h1>
+<p>Each process is in one state: <code>RELEASED</code>, <code>WANTED</code>, or <code>HELD</code>. The pair order is <span class="math inline">\((T, p) &lt; (T', q)\)</span> when <span class="math inline">\(T &lt; T'\)</span>, or when the timestamps are equal and <span class="math inline">\(p &lt; q\)</span>.</p>
+<pre><code>state := RELEASED
+
+enter():
+    state := WANTED
+    T := Lamport time of this request
+    send Request(R, i, T) to every other process
+    wait for (N - 1) replies
+    state := HELD
+
+on Request(Ti, pi) at pj, i ≠ j:
+    if state = HELD
+       or (state = WANTED and (T, pj) &lt; (Ti, pi)):
+        queue pi          # reply later
+    else:
+        reply to pi       # at once
+
+exit():
+    state := RELEASED
+    reply to every queued request</code></pre>
+<p>If <span class="math inline">\(P_j\)</span> is in the critical section, or it is waiting with an earlier pair, it withholds the reply. Otherwise it replies immediately, including when it is waiting with a later pair.</p>
+</section>
+<section id="ricart-agrawala-algorithm-example" class="slide level1">
+<h1>Ricart &amp; Agrawala algorithm: example</h1>
+<p>The same two requests, <span class="math inline">\((1,1) &lt; (1,2)\)</span>. There is no release. The missing arrow is the point: <span class="math inline">\(P_1\)</span> does not answer <span class="math inline">\(P_2\)</span> when the request arrives.</p>
+
+<img data-src="../../images/06/ricart-mutex.png" alt="Space-time diagram of Ricart and Agrawala. P2 replies at once. P1 queues P2 and sends that reply only on exit." class="r-stretch"><ul>
+<li><span class="math inline">\(P_2\)</span> is waiting, but with a later pair, so the reply to <span class="math inline">\(P_1\)</span> leaves at once</li>
+<li><span class="math inline">\(P_3\)</span> is idle, so both of its replies leave at once</li>
+<li><span class="math inline">\(P_1\)</span> has the earlier pair, queues <span class="math inline">\(P_2\)</span>, and enters as soon as those two replies have arrived</li>
+<li>On exit, <span class="math inline">\(P_1\)</span> sends the reply it had withheld. That dashed arrow, not a release, is what lets <span class="math inline">\(P_2\)</span> in</li>
+</ul>
+</section>
+<section id="ricart-agrawala-algorithm-2" class="slide level1">
+<h1>Ricart &amp; Agrawala algorithm</h1>
+<p><span class="text-green"><strong>Safety</strong></span>: two competing processes do not reply to each other. The later pair replies; the earlier pair defers its reply until it leaves. Both cannot be in the critical section. The pair <span class="math inline">\((T_i, i)\)</span> is unique, so one of the two is earlier.</p>
+<p><span class="text-green"><strong>Liveness</strong></span>: the pending request with the smallest pair receives a reply from every peer. A process that is only waiting, and has a larger pair, replies at once. It does not defer. If nobody fails and every holder leaves, that smallest request collects <span class="math inline">\((N-1)\)</span> replies.</p>
+<p><span class="text-green"><strong>Fairness</strong></span>: among overlapping requests, the smaller pair enters first.</p>
+<p><span class="text-green"><strong>Delay</strong></span>: <span class="math inline">\((N-1)\)</span> requests and <span class="math inline">\((N-1)\)</span> replies, so <span class="math inline">\(2(N-1)\)</span> messages per entry. There is no release multicast. On exit the process sends the replies it had postponed, from <span class="math inline">\(0\)</span> to <span class="math inline">\((N-1)\)</span>. Those messages are the replies the waiting processes already count in their own <span class="math inline">\(2(N-1)\)</span>.</p>
+<p><span class="text-red"><strong>Problems</strong></span>:</p>
+<ul>
+<li>Any silent process blocks entry: <span class="math inline">\((N-1)\)</span> replies are required</li>
+<li>Every request is still sent to the whole group</li>
+</ul>
+</section>
+<section id="comparison" class="slide level1">
+<h1>Comparison</h1>
+<p>Both use the pair <span class="math inline">\((T_i, i)\)</span>. They differ in who replies, and in what a process needs before it enters.</p>
+<div class="table-small">
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Lamport</th>
+<th>Ricart &amp; Agrawala</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Reply</td>
+<td>Always, at once. No hold-back</td>
+<td>At once, unless the receiver is in the critical section or waiting with an earlier pair</td>
+</tr>
+<tr class="even">
+<td>Enter when</td>
+<td>Own request is the earliest in the queue, and a later reply has arrived from every peer</td>
+<td><span class="math inline">\((N-1)\)</span> replies have arrived</td>
+</tr>
+<tr class="odd">
+<td>Release</td>
+<td>Multicast <code>Release</code> to the group; each peer deletes that request</td>
+<td>No release multicast. Reply only to the queued requests</td>
+</tr>
+<tr class="even">
+<td>Messages per entry</td>
+<td><span class="math inline">\(3(N-1)\)</span>: request, reply, release</td>
+<td><span class="math inline">\(2(N-1)\)</span>: request, reply</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="types-of-mutual-exclusion-algorithms-2" class="slide level1">
+<h1>Types of mutual exclusion algorithms</h1>
+<ul>
+<li><strong>Centralized</strong>. A process can access a resource because a central coordinator allowed it to do so.</li>
+<li><strong>Token-based</strong>. A process can access a resource if it is holding a token permitting it to do so.</li>
+<li><strong>Contention-based / Quorum-based</strong>. A process can access a resource via distributed agreement.</li>
+</ul>
+</section>
+<section id="maekawas-algorithm" class="slide level1">
+<h1>Maekawa’s algorithm</h1>
+<p>Maekawa’s algorithm is the first quorum-based mutual exclusion algorithm <span class="citation" data-cites="maekawa1985sqrt">(<a href="#/referencias" role="doc-biblioref" onclick="">Maekawa 1985</a>)</span>. A process does not ask the whole group. It asks the members of its voting set, and it enters when every one of them has replied.</p>
+<p>It differs from Lamport and from Ricart &amp; Agrawala in two ways:</p>
+<ul>
+<li>The request goes to a subset, not to all <span class="math inline">\(N-1\)</span> peers</li>
+<li>A process grants its vote to one requester at a time. It grants the next vote only after the previous holder has released it</li>
+</ul>
+</section>
+<section id="voting-sets" class="slide level1">
+<h1>Voting sets</h1>
+<p>Each process <span class="math inline">\(p_i\)</span> has a voting set <span class="math inline">\(V_i \subseteq \{p_1, \ldots, p_N\}\)</span>:</p>
+<ul>
+<li><span class="math inline">\(p_i \in V_i\)</span></li>
+<li><span class="math inline">\(V_i \cap V_j \neq \emptyset\)</span>: any two voting sets share at least one process</li>
+<li><span class="math inline">\(|V_i| = K\)</span>: every voting set has the same size</li>
+<li>each process <span class="math inline">\(p_j\)</span> belongs to <span class="math inline">\(M\)</span> voting sets</li>
+</ul>
+<p>A fair construction takes <span class="math inline">\(K \approx \sqrt{N}\)</span> and <span class="math inline">\(M = K\)</span>. The shared member is what makes the exclusion work: two candidates always have one voter in common, and that voter has only one vote.</p>
+</section>
+<section id="building-a-voting-set" class="slide level1">
+<h1>Building a voting set</h1>
+<p>When <span class="math inline">\(N\)</span> is a square, place the <span class="math inline">\(N\)</span> processes in a <span class="math inline">\(\sqrt{N} \times \sqrt{N}\)</span> grid. The voting set of <span class="math inline">\(p_i\)</span> is its row together with its column.</p>
+<p>Then <span class="math inline">\(K = M = 2\sqrt{N} - 1\)</span>. Any two sets intersect: they share a row, they share a column, or the row of one crosses the column of the other.</p>
+<p>Maekawa’s bound <span class="math inline">\(K \approx \sqrt{N}\)</span> is a little smaller. It needs a projective plane, which exists only for some <span class="math inline">\(N\)</span>. For <span class="math inline">\(N = 7\)</span> the sets have size <span class="math inline">\(3\)</span>.</p>
+</section>
+<section id="voting-sets-example" class="slide level1">
+<h1>Voting sets: example</h1>
+<p><span class="math inline">\(N = 4 = 2 \times 2\)</span>, so <span class="math inline">\(K = 2\sqrt{4} - 1 = 3\)</span>.</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th></th>
+<th>column 1</th>
+<th>column 2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>row 1</td>
+<td><span class="math inline">\(P_1\)</span></td>
+<td><span class="math inline">\(P_2\)</span></td>
+</tr>
+<tr class="even">
+<td>row 2</td>
+<td><span class="math inline">\(P_3\)</span></td>
+<td><span class="math inline">\(P_4\)</span></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><span class="math inline">\(V_1 = \{P_1, P_2, P_3\}\)</span></li>
+<li><span class="math inline">\(V_2 = \{P_2, P_1, P_4\}\)</span></li>
+<li><span class="math inline">\(V_3 = \{P_3, P_1, P_4\}\)</span></li>
+<li><span class="math inline">\(V_4 = \{P_4, P_2, P_3\}\)</span></li>
+</ul>
+<p><span class="math inline">\(V_1 \cap V_2 = \{P_1, P_2\}\)</span>, and every other pair also shares a process. Each process appears in exactly <span class="math inline">\(M = 3\)</span> sets. To enter, <span class="math inline">\(P_1\)</span> needs replies from <span class="math inline">\(P_1\)</span>, <span class="math inline">\(P_2\)</span> and <span class="math inline">\(P_3\)</span> only.</p>
+</section>
+<section id="maekawas-algorithm-1" class="slide level1">
+<h1>Maekawa’s algorithm</h1>
+<pre><code>state := RELEASED
+voted := FALSE
+
+enter():
+    state := WANTED
+    send Request to every process in Vi
+    wait until K replies have arrived
+    state := HELD
+
+on Request from pi at pj:
+    if state = HELD or voted = TRUE:
+        queue pi
+    else:
+        reply to pi
+        voted := TRUE
+
+exit():
+    state := RELEASED
+    send Release to every process in Vi
+
+on Release at pj:
+    if the queue is not empty:
+        pk := head of the queue
+        reply to pk
+        voted := TRUE
+    else:
+        voted := FALSE</code></pre>
+<p>The vote stays with one requester. A queued request gets that vote only when the release arrives.</p>
+</section>
+<section id="maekawas-algorithm-2" class="slide level1">
+<h1>Maekawa’s algorithm</h1>
+<p><span class="text-green"><strong>Safety</strong></span>: <span class="math inline">\(V_i \cap V_j\)</span> is never empty, and the process in that intersection grants one vote. Two candidates cannot both collect <span class="math inline">\(K\)</span> replies.</p>
+<p><span class="text-red"><strong>Liveness</strong></span>: this version can deadlock. <span class="math inline">\(P_1\)</span> may hold <span class="math inline">\(P_2\)</span>’s vote while <span class="math inline">\(P_2\)</span> holds <span class="math inline">\(P_1\)</span>’s vote, and each waits for the missing reply. Maekawa breaks the wait with the pair <span class="math inline">\((T_i, i)\)</span>: the later request returns the vote.</p>
+<p><span class="text-green"><strong>Delay</strong></span>: one entry sends <span class="math inline">\(K\)</span> requests, <span class="math inline">\(K\)</span> replies and <span class="math inline">\(K\)</span> releases, so <span class="math inline">\(3K\)</span> messages. With the grid, <span class="math inline">\(K = 2\sqrt{N}-1\)</span>. With a projective plane, <span class="math inline">\(K \approx \sqrt{N}\)</span>, and the cost is about <span class="math inline">\(3\sqrt{N}\)</span> instead of <span class="math inline">\(3(N-1)\)</span>.</p>
+<p><span class="text-red"><strong>Problems</strong></span>:</p>
+<ul>
+<li>Deadlock, unless a later request yields its vote</li>
+<li>A silent member of <span class="math inline">\(V_i\)</span> still blocks entry, but only the members of <span class="math inline">\(V_i\)</span> are asked</li>
+</ul>
+</section>
+<section id="current-ds-implementations-of-mutual-exclusion" class="slide level1">
+<h1>Current DS Implementations of Mutual Exclusion</h1>
+<ul>
+<li><a href="https://zookeeper.apache.org/">Apache ZooKeeper</a> uses the <a href="https://zookeeper.apache.org/doc/r3.4.13/zookeeperInternals.html">Zab</a> (ZooKeeper Atomic Broadcast) protocol to ensure all replicas apply updates in the same order.</li>
+<li><a href="https://etcd.io/">etcd</a> and <a href="https://developer.hashicorp.com/consul">Consul</a> rely on Raft (another Consensus Protocol - next Unit)</li>
+</ul>
+<p>They are used on: Apache Kafka, Kubernetes, Apache Spark</p>
+</section>
+<section id="activity-1" class="slide level1 activity">
+<h1>Activity</h1>
+<div class="columns">
+<div class="column" style="width:46%;">
+<pre><code>U5-Coordination/WithETCD
+├──
+├── docker-compose.yml
+└── client.py</code></pre>
+</div><div class="column" style="width:54%;">
+<ul>
+<li>Implement more clients</li>
+</ul>
+</div></div>
+</section>
+<section id="referencias" class="slide level1 allowframebreaks smaller scrollable">
+<h1>Referencias</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-Buchman2018Tendermint" class="csl-entry" role="listitem">
+Buchman, Ethan, Jae Kwon, and Zarko Milosevic. 2018. <span>“The Latest Gossip on <span>BFT</span> Consensus.”</span> <em>arXiv Preprint arXiv:1807.04938</em>.
+</div>
+<div id="ref-Castro1999PracticalBF" class="csl-entry" role="listitem">
+Castro, Miguel, and Barbara Liskov. 1999. <span>“Practical Byzantine Fault Tolerance.”</span> <em>Proceedings of the Third Symposium on Operating Systems Design and Implementation (OSDI)</em>, 173–86.
+</div>
+<div id="ref-lamport1978time" class="csl-entry" role="listitem">
+Lamport, Leslie. 1978. <span>“Time, Clocks, and the Ordering of Events in a Distributed System.”</span> <em>Communications of the ACM</em> (New York, NY, USA) 21 (7): 558–65. <a href="https://doi.org/10.1145/359545.359563">https://doi.org/10.1145/359545.359563</a>.
+</div>
+<div id="ref-Lamport1982Byzantine" class="csl-entry" role="listitem">
+Lamport, Leslie, Robert Shostak, and Marshall Pease. 1982. <span>“The <span>Byzantine</span> Generals Problem.”</span> <em>ACM Transactions on Programming Languages and Systems</em> 4 (3): 382–401.
+</div>
+<div id="ref-maekawa1985sqrt" class="csl-entry" role="listitem">
+Maekawa, Mamoru. 1985. <span>“A <span><span class="math inline">\(\sqrt{N}\)</span></span> Algorithm for Mutual Exclusion in Decentralized Systems.”</span> <em>ACM Transactions on Computer Systems</em> (New York, NY, USA) 3 (2): 145–59. <a href="https://doi.org/10.1145/214438.214445">https://doi.org/10.1145/214438.214445</a>.
+</div>
+<div id="ref-ricart1981optimal" class="csl-entry" role="listitem">
+Ricart, Glenn, and Ashok K. Agrawala. 1981. <span>“An Optimal Algorithm for Mutual Exclusion in Computer Networks.”</span> <em>Communications of the ACM</em> (New York, NY, USA) 24 (1): 9–17. <a href="https://doi.org/10.1145/358527.358537">https://doi.org/10.1145/358527.358537</a>.
+</div>
+</div>
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="tema-06-coordination-em_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="tema-06-coordination-em_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="tema-06-coordination-em_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="tema-06-coordination-em_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="tema-06-coordination-em_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="tema-06-coordination-em_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="tema-06-coordination-em_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="tema-06-coordination-em_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="tema-06-coordination-em_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="tema-06-coordination-em_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': false,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1600,
+
+        height: 900,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 1.0e-2,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script>
+    (() => {
+      const AI_MODE_URL = "https://www.google.com/aimode";
+      const TOAST_ID = "ai-mode-toast";
+
+      function findTrigger(target) {
+        return target.closest(".ai-mode-button");
+      }
+
+      function normalizeTriggers() {
+        document.querySelectorAll("a.ai-mode-button[href]").forEach((anchor) => {
+          anchor.removeAttribute("href");
+        });
+      }
+
+      function platformPasteShortcut() {
+        const platform = navigator.userAgentData?.platform || navigator.platform || "";
+        return /mac|iphone|ipad/i.test(platform) ? "Cmd+V" : "Ctrl+V";
+      }
+
+      function readPrompt(button) {
+        const attributePrompt = button.getAttribute("data-ai-prompt");
+        if (attributePrompt && attributePrompt.trim()) {
+          return attributePrompt.trim();
+        }
+
+        const container = button.closest(".ai-mode-launcher");
+        if (!container) {
+          return "";
+        }
+
+        const promptNode = container.querySelector(
+          "template.ai-mode-prompt, script.ai-mode-prompt[type='text/plain'], textarea.ai-mode-prompt"
+        );
+
+        if (!promptNode) {
+          return "";
+        }
+
+        if (promptNode.tagName === "TEMPLATE" && promptNode.content) {
+          return (promptNode.content.textContent || "").trim();
+        }
+
+        if ("value" in promptNode) {
+          return promptNode.value.trim();
+        }
+
+        return (promptNode.textContent || promptNode.innerHTML || "").trim();
+      }
+
+      function showToast(message, isError = false) {
+        let toast = document.getElementById(TOAST_ID);
+
+        if (!toast) {
+          toast = document.createElement("div");
+          toast.id = TOAST_ID;
+          toast.className = "ai-mode-toast";
+          document.body.appendChild(toast);
+        }
+
+        toast.textContent = message;
+        toast.dataset.state = isError ? "error" : "ok";
+        toast.classList.add("is-visible");
+
+        window.clearTimeout(showToast.timeoutId);
+        showToast.timeoutId = window.setTimeout(() => {
+          toast.classList.remove("is-visible");
+        }, 4200);
+      }
+
+      async function launchAiMode(button) {
+        const prompt = readPrompt(button);
+        if (!prompt) {
+          showToast("Este botón no tiene ningún prompt asociado.", true);
+          return;
+        }
+
+        const popup = window.open(AI_MODE_URL, "_blank", "noopener,noreferrer");
+        let copied = false;
+
+        try {
+          await navigator.clipboard.writeText(prompt);
+          copied = true;
+        } catch (error) {
+          copied = false;
+        }
+
+        if (popup) {
+          popup.focus();
+        }
+
+        if (copied) {
+          showToast(
+            `Google AI Mode abierto. El prompt ya está en el portapapeles: pega con ${platformPasteShortcut()}.`
+          );
+          return;
+        }
+
+        showToast(
+          `Google AI Mode abierto, pero el navegador no permitió copiar el prompt. Se mostrará para copiarlo manualmente.`,
+          true
+        );
+        window.prompt("Copia este prompt y pégalo en Google AI Mode:", prompt);
+      }
+
+      function handleActivation(event) {
+        const button = findTrigger(event.target);
+        if (!button) {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        launchAiMode(button);
+      }
+
+      document.addEventListener("click", handleActivation, true);
+
+      document.addEventListener(
+        "keydown",
+        (event) => {
+          const button = findTrigger(event.target);
+          if (!button) {
+            return;
+          }
+
+          if (event.key !== "Enter" && event.key !== " ") {
+            return;
+          }
+
+          handleActivation(event);
+        },
+        true
+      );
+
+      normalizeTriggers();
+    })();
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

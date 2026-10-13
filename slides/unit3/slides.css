@@ -164,6 +164,15 @@
   color: #062447;
 }
 
+/* Static emphasis. Not a Reveal fragment: the colour is there from the start. */
+.reveal .text-red {
+  color: #c62828;
+}
+
+.reveal .text-green {
+  color: #2e7d32;
+}
+
 /* Compact style for dense technical tables (e.g., OSI) */
 .reveal .table-small {
   font-size: 0.8em;
