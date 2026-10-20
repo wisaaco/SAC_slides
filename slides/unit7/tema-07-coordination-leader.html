@@ -9,7 +9,7 @@
 <link href="tema-07-coordination-leader_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.9.37">
 
-  <title>Tema 6. Coordination: Elections &amp; Quorum-based Consensus</title>
+  <title>Tema 7. Coordination: Elections &amp; Quorum-based Consensus</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -149,7 +149,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Tema 6. Coordination: Elections &amp; Quorum-based Consensus</h1>
+  <h1 class="title">Tema 7. Coordination: Elections &amp; Quorum-based Consensus</h1>
   <p class="subtitle">Sistemas Actuales de Computación</p>
 
 <div class="quarto-title-authors">
@@ -158,7 +158,7 @@
 </section>
 <section id="activity" class="slide level1 activity">
 <h1>Activity</h1>
-<p>En serio, ¿quién es lider?</p>
+<p>En serio, ¿quién es líder?</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="../../images/07/spidermanmeme.jpg" class="quarto-figure quarto-figure-center" style="width:48.0%" alt="Spiderman meme"></p>
@@ -231,7 +231,7 @@
 <h1>Paxos</h1>
 <p>Paxos agrees on a single value <span class="citation" data-cites="lamport1998paxos">(<a href="#/referencias" role="doc-biblioref" onclick="">Lamport 1998</a>)</span>. A <strong>proposer</strong> drives a round, <strong>acceptors</strong> store the decision, and <strong>learners</strong> are told the result. A round is a number <span class="math inline">\(n\)</span>, and a higher <span class="math inline">\(n\)</span> supersedes a lower one.</p>
 <ol type="1">
-<li><strong>Prepare.</strong> The proposer picks a fresh <span class="math inline">\(n\)</span> and asks the acceptors. An acceptor promises not to accept any proposal numbered below <span class="math inline">\(n\)</span>, and it reports the highest proposal it has already accepted, if any</li>
+<li><strong>Prepare.</strong> The proposer picks an <strong>unique and incremental</strong> <span class="math inline">\(n\)</span> and asks the acceptors. An acceptor <strong>promises</strong> not to accept any proposal numbered below <span class="math inline">\(n\)</span>, and it reports the highest proposal it has already accepted, if any</li>
 <li><strong>Accept.</strong> Once a majority has promised, the proposer sends <span class="math inline">\((n, v)\)</span>. The value <span class="math inline">\(v\)</span> is the one reported by that majority, or the proposer’s own value if nobody had accepted anything. An acceptor accepts it unless it has promised a higher number</li>
 <li><strong>Learn.</strong> A value accepted by a majority is chosen. Learners can be told by the acceptors</li>
 </ol>
@@ -258,13 +258,14 @@
 <li><strong>Log.</strong> The leader appends client operations and replicates them. An entry is committed once a majority has stored it</li>
 <li><strong>Failure.</strong> If the leader stops, the next timeout starts a new term. The cluster keeps deciding while a majority of servers is up</li>
 </ul>
-<p><a href="https://raft.github.io/">Raft visualized</a> · <a href="https://etcd.io/docs/v3.8/tuning/">etcd timeouts</a></p>
 </section>
 <section id="raft-example" class="slide level1">
 <h1>Raft: example</h1>
 <p>Three servers, no heartbeat. <span class="math inline">\(S_1\)</span> times out in term <span class="math inline">\(2\)</span>, asks <span class="math inline">\(S_2\)</span> and <span class="math inline">\(S_3\)</span>, and both grant the vote. Two grants plus its own vote are a majority, so <span class="math inline">\(S_1\)</span> becomes leader and starts the heartbeats.</p>
 
-<img data-src="../../images/07/raft-election.png" style="width:88.0%" alt="Raft election. S1 times out, collects votes from S2 and S3, becomes leader, and sends heartbeats." class="r-stretch"></section>
+<img data-src="../../images/07/raft-election.png" style="width:88.0%" alt="Raft election. S1 times out, collects votes from S2 and S3, becomes leader, and sends heartbeats." class="r-stretch"><p><a href="https://raft.github.io/">Raft visualized</a></p>
+<p>Case on: <a href="https://etcd.io/docs/v3.8/tuning/">etcd timeouts</a></p>
+</section>
 <section id="zookeeper-election" class="slide level1">
 <h1>ZooKeeper election</h1>
 <p>A client that wants to lead creates a child of <code>/election</code> with the flags <code>SEQUENCE</code> and <code>EPHEMERAL</code> <span class="citation" data-cites="hunt2010zookeeper">(<a href="#/referencias" role="doc-biblioref" onclick="">Hunt et al. 2010</a>)</span>. ZooKeeper appends a unique increasing number. The session owns the node: if the client disconnects, the node is deleted.</p>
@@ -297,10 +298,10 @@
 <h1>Entregable</h1>
 <p>``La rebelión de las calculadoras’’</p>
 <ul>
-<li>Implementa un minimo de 5 entidades distribuidas que sepán realizar operaciones matemáticas básicas.</li>
-<li>Siempre ha de haber una que sea lider.</li>
-<li>Habrá usuarios que continuamente pidan petciones al lider, le atenderá y delegará en las otras entidades ese reparto de operaciones.</li>
-<li>Cuando una entidad se elige como lider, se activa una cuenta atrás de autodestrucción (tiempo aleatorio). Despues de su activación no responderá durante un cierto tiempo (aleatorio) y cuando se recupere habrá perdido su role de “leader”</li>
+<li>Implementa mínimo 5 entidades distribuidas que sepán realizar operaciones matemáticas básicas.</li>
+<li>Siempre ha de haber una que sea líder.</li>
+<li>Habrá usuarios que pidan continuamente peticiones al líder, él le atenderá y delegará en las otras entidades ese reparto de operaciones.</li>
+<li>Cuando una entidad se elige como líder, se activa una cuenta atrás de autodestrucción (tiempo aleatorio). Despues de su activación no responderá durante un cierto tiempo (aleatorio) y cuando se recupere habrá perdido su role de “leader”</li>
 </ul>
 <p>Requerimientos:</p>
 <ul>
