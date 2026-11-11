@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<script src="tema-11-HashTables_files/libs/clipboard/clipboard.min.js"></script>
+<script src="tema-11-HashTables_files/libs/quarto-html/tabby.min.js"></script>
+<script src="tema-11-HashTables_files/libs/quarto-html/popper.min.js"></script>
+<script src="tema-11-HashTables_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="tema-11-HashTables_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="tema-11-HashTables_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="tema-11-HashTables_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.37">
+
+  <title>Tema 11. Tablas hash distribuidas</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="tema-11-HashTables_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="tema-11-HashTables_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="tema-11-HashTables_files/libs/revealjs/dist/theme/quarto-0427d8d92a431aa6a6430e53ec02a470.css">
+  <link rel="stylesheet" href="slides.css">
+  <link href="tema-11-HashTables_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="tema-11-HashTables_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="tema-11-HashTables_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="tema-11-HashTables_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Tema 11. Tablas hash distribuidas</h1>
+  <p class="subtitle">Localización y particionado de datos en sistemas distribuidos</p>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="from-a-local-hash-table-to-a-distributed-one" class="slide level1">
+<h1>From a local hash table to a distributed one</h1>
+<p>A local hash table maps a key to a memory location:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a>i <span class="op">=</span> <span class="bu">hash</span>(key) <span class="op">%</span> capacity</span>
+<span id="cb1-2"><a href=""></a>table[i] <span class="op">=</span> value</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In a distributed system, two separate questions arise:</p>
+<ol type="1">
+<li><strong>Partitioning:</strong> which node is responsible for the key?</li>
+<li><strong>Lookup:</strong> how does a client find that node?</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href=""></a>key ──hash──&gt; identifier ──lookup──&gt; node ──operation──&gt; value</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The DHT mainly provides <strong>exact-key lookup</strong>; by itself, it does not provide replication, transactions, or consistency.</p>
+</section>
+<section id="three-lookup-strategies" class="slide level1">
+<h1>Three lookup strategies</h1>
+<div class="table-small">
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Strategy</th>
+<th>Example</th>
+<th>Location state</th>
+<th>Lookup cost</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Centralized directory</td>
+<td>Napster</td>
+<td>One server knows every peer</td>
+<td>(O(1)), but centralized</td>
+</tr>
+<tr class="even">
+<td>Unstructured network</td>
+<td>Gnutella</td>
+<td>Each peer knows some neighbors</td>
+<td>Depends on flooding</td>
+</tr>
+<tr class="odd">
+<td>Structured DHT</td>
+<td>CAN, Chord</td>
+<td>State distributed among nodes</td>
+<td>Bounded by the overlay</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>An <strong>overlay network</strong> is a logical graph built on top of the IP network. Logical neighbors need not be physical neighbors.</p>
+</section>
+<section id="centralized-directory-napster" class="slide level1">
+<h1>Centralized directory: Napster</h1>
+<p>Napster separated the <strong>control plane</strong> from the <strong>data plane</strong>:</p>
+<ol type="1">
+<li>Each client told the central directory which files it shared.</li>
+<li>A query returned the peers that held the requested file.</li>
+<li>The file was downloaded directly between peers.</li>
+</ol>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Advantages</strong></p>
+<ul>
+<li>Simple design and queries</li>
+<li>Exact-key and metadata searches</li>
+<li>Global view for system administration</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Limitations</strong></p>
+<ul>
+<li>Bottleneck for queries and updates</li>
+<li>State proportional to the number of peers and files</li>
+<li>Single point of failure and control</li>
+</ul>
+</div></div>
+<p>Data transfer was P2P, but lookup was not decentralized.</p>
+</section>
+<section id="unstructured-network-gnutella" class="slide level1">
+<h1>Unstructured network: Gnutella</h1>
+<p>Each peer maintains connections to a small set of neighbors. No rule determines where a key is stored <span class="citation" data-cites="ripeanu2001gnutella">(<a href="#/referencias" role="doc-biblioref" onclick="">Ripeanu 2001</a>)</span>.</p>
+<p>If the data is not stored locally, the node propagates a query:</p>
+<ul>
+<li><strong>GUID:</strong> identifies the request and allows duplicates to be discarded.</li>
+<li><strong>TTL:</strong> limits the number of hops.</li>
+<li><strong>Reverse path:</strong> responses return through the nodes that propagated the query.</li>
+<li><strong>Transfer:</strong> once the resource has been located, it is transferred directly between peers.</li>
+</ul>
+<p>Flooding supports more flexible queries than a DHT, but a search may generate many messages and does not guarantee that every result will be found.</p>
+</section>
+<section id="from-flooding-to-structure" class="slide level1">
+<h1>From flooding to structure</h1>
+<p>The cost of flooding grows with the number of nodes reached:</p>
+<ul>
+<li>It consumes bandwidth even at nodes that do not hold the data.</li>
+<li>The TTL trades <strong>coverage</strong> for <strong>cost</strong>.</li>
+<li>Heterogeneous and frequently changing peers make useful routes difficult to maintain.</li>
+</ul>
+<p>Gnutella introduced <em>ultrapeers</em>, while Kazaa used <em>supernodes</em>: more capable nodes aggregated indexes from leaf nodes. This reduces traffic but reintroduces hierarchy.</p>
+<p>A DHT changes the question:</p>
+<blockquote>
+<p>Instead of asking “who has this key?”, it defines in advance “who should be responsible for this key?”</p>
+</blockquote>
+</section>
+<section id="dht-interface" class="slide level1">
+<h1>DHT interface</h1>
+<p>A distributed hash table provides two conceptual operations:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href=""></a>put(key, value)</span>
+<span id="cb3-2"><a href=""></a>get(key) -&gt; value</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Both nodes and keys are mapped into the same identifier space. The protocol assigns each identifier to a node and maintains routes to that node.</p>
+<p>Desirable properties:</p>
+<ul>
+<li><strong>Balance:</strong> distribute keys approximately uniformly.</li>
+<li><strong>Scalability:</strong> maintain little routing state per node.</li>
+<li><strong>Reconfiguration:</strong> move few keys when a node joins or leaves.</li>
+<li><strong>Fault tolerance:</strong> preserve routes and data through redundancy.</li>
+</ul>
+<p>Uniform distribution depends on the hash function; a DHT is poorly suited to range queries or queries on secondary attributes.</p>
+</section>
+<section id="can-coordinate-space" class="slide level1">
+<h1>CAN: coordinate space</h1>
+<p>CAN (<em>Content Addressable Network</em>) represents the key space as a (<span class="math inline">\(d\)</span>)-dimensional torus and divides it into zones <span class="citation" data-cites="ratnasamy2001can">(<a href="#/referencias" role="doc-biblioref" onclick="">Ratnasamy et&nbsp;al. 2001</a>)</span>.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li>For (<span class="math inline">\(d=2\)</span>), a key is mapped to (<span class="math inline">\(h_x(k)\)</span>, <span class="math inline">\(h_y(k)\)</span>).</li>
+<li>Each node is responsible for a rectangular zone.</li>
+<li>Two nodes are neighbors if their zones share a boundary.</li>
+<li>The routing table contains (<span class="math inline">\(O(d)\)</span>) neighbors; there may be more than one in each direction.</li>
+</ul>
+<p>In the figure, each color represents the zone assigned to one node.</p>
+</div><div class="column" style="width:50%;">
+<p><img data-src="../../images/11/can0.png" style="width:96.0%" alt="Two-dimensional partition of the CAN coordinate space"></p>
+</div></div>
+</section>
+<section id="can-adding-a-node" class="slide level1">
+<h1>CAN: adding a node</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>To add a node:</p>
+<ol type="1">
+<li>A point in the space is selected using a hash.</li>
+<li>The new node routes a request to the owner of that point.</li>
+<li>The zone is split, and the new node receives one half.</li>
+<li>Both nodes update their neighbors and transfer the affected keys.</li>
+</ol>
+<p>The local split avoids redistributing the entire table.</p>
+</div><div class="column" style="width:50%;">
+<p><img data-src="../../images/11/can1.png" style="width:96.0%" alt="Splitting a CAN zone when a node joins"></p>
+</div></div>
+</section>
+<section id="can-lookup" class="slide level1">
+<h1>CAN: lookup</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong><code>lookup(k)</code></strong></p>
+<ol type="1">
+<li>Compute the coordinates of (<span class="math inline">\(k\)</span>).</li>
+<li>If they belong to the local zone, query local storage.</li>
+<li>Otherwise, forward the request to the neighbor closest to the destination.</li>
+</ol>
+<p>With (<span class="math inline">\(N\)</span>) nodes and (<span class="math inline">\(d\)</span>) dimensions, the average path length is:</p>
+<p><span class="math inline">\(O\left(d\,N^{1/d}\right)\)</span></p>
+<p>Increasing (<span class="math inline">\(d\)</span>) shortens routes but increases neighborhood state.</p>
+</div><div class="column" style="width:50%;">
+<p><img data-src="../../images/11/can2.png" style="width:96.0%" alt="Greedy routing of a query in CAN"></p>
+</div></div>
+</section>
+<section id="chord-consistent-hashing" class="slide level1">
+<h1>Chord: consistent hashing</h1>
+<p>Chord arranges (<span class="math inline">\(m\)</span>)-bit identifiers in a ring modulo (<span class="math inline">\(2^m\)</span>) <span class="citation" data-cites="stoica2001chord">(<a href="#/referencias" role="doc-biblioref" onclick="">Stoica et&nbsp;al. 2001</a>)</span>.</p>
+<ul>
+<li><span class="math inline">\(2^m\)</span> is the number of <strong>possible identifiers</strong>, not the number of nodes.</li>
+<li><code>hash(node address)</code> places each node on the ring.</li>
+<li><code>hash(key)</code> places each key on the same ring.</li>
+<li>Key (<span class="math inline">\(k\)</span>) is assigned to <code>successor(k)</code>: the first clockwise node whose identifier is <span class="math inline">\(\ge k\)</span>.</li>
+</ul>
+<p>With consistent hashing, when a node joins or leaves, only the keys in a contiguous portion of the ring change owners <span class="citation" data-cites="karger1997consistent">(<a href="#/referencias" role="doc-biblioref" onclick="">Karger et&nbsp;al. 1997</a>)</span>.</p>
+</section>
+<section id="chord-key-distribution" class="slide level1">
+<h1>Chord: key distribution</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Example with <span class="math inline">\(m=6\)</span>: there are 64 possible positions and only four active nodes.</p>
+<ul>
+<li><span class="math inline">\(n_{20}\)</span>: keys (6,<span class="math inline">\(\ldots\)</span>,20)</li>
+<li><span class="math inline">\(n_{38}\)</span>: keys (21,<span class="math inline">\(\ldots\)</span>,38)</li>
+<li><span class="math inline">\(n_{50}\)</span>: keys (39,<span class="math inline">\(\ldots\)</span>,50)</li>
+<li><span class="math inline">\(n_{5}\)</span>: keys (51,<span class="math inline">\(\ldots\)</span>,63,0,<span class="math inline">\(\ldots\)</span>,5)</li>
+</ul>
+<p>For example, node <span class="math inline">\(n_5\)</span> stores the keys with identifiers 63 and 0.</p>
+</div><div class="column" style="width:50%;">
+<p><img data-src="../../images/11/chord.png" style="width:96.0%" alt="Six-bit Chord ring with four active nodes"></p>
+</div></div>
+</section>
+<section id="chord-scalable-routing" class="slide level1">
+<h1>Chord: scalable routing</h1>
+<p>Knowing only the successor would be correct, but a lookup might traverse <span class="math inline">\(O(N)\)</span> nodes.</p>
+<p>Each node <span class="math inline">\(n\)</span> maintains a <em>finger table</em>. Entry <span class="math inline">\(i\)</span> points to:</p>
+<p><span class="math inline">\(\operatorname{successor}\left(n + 2^{i-1}\right)\)</span></p>
+<p>To look up <span class="math inline">\(k\)</span>, the request is forwarded to the <em>finger</em> that most closely precedes <span class="math inline">\(k\)</span>. With stable tables:</p>
+<ul>
+<li>State per node: <span class="math inline">\(O(\log N)\)</span></li>
+<li>Hops per lookup: <span class="math inline">\(O(\log N)\)</span></li>
+</ul>
+<p>Successor lists and periodic stabilization protocols repair the ring after nodes join or fail <span class="citation" data-cites="stoica2001chord">(<a href="#/referencias" role="doc-biblioref" onclick="">Stoica et&nbsp;al. 2001</a>)</span>.</p>
+</section>
+<section id="a-dht-is-not-a-complete-database" class="slide level1">
+<h1>A DHT is not a complete database</h1>
+<p>The DHT determines <strong>where</strong> a key should be stored. A distributed database must still decide:</p>
+<ul>
+<li><strong>Replication:</strong> how many copies to keep and on which nodes.</li>
+<li><strong>Consistency:</strong> which versions a read may return.</li>
+<li><strong>Concurrency:</strong> how to resolve simultaneous writes.</li>
+<li><strong>Durability:</strong> what happens if several nodes fail.</li>
+<li><strong>Repair:</strong> how to detect and synchronize divergent replicas.</li>
+<li><strong>Queries:</strong> how to support ranges, secondary indexes, or aggregations.</li>
+</ul>
+<p>Therefore, a DHT is one component of a storage system, not a complete database.</p>
+</section>
+<section id="from-chord-to-dynamo" class="slide level1">
+<h1>From Chord to Dynamo</h1>
+<p>Dynamo adopts a consistent-hashing ring to partition data, but it does not use Chord as a lookup protocol among anonymous clients <span class="citation" data-cites="decandia2007dynamo">(<a href="#/referencias" role="doc-biblioref" onclick="">DeCandia et&nbsp;al. 2007</a>)</span>.</p>
+<ul>
+<li>Nodes learn cluster membership through <em>gossip</em>.</li>
+<li>Each key is replicated on <span class="math inline">\(N\)</span> nodes.</li>
+<li>Reads and writes wait for configurable numbers of responses, <span class="math inline">\(R\)</span> and <span class="math inline">\(W\)</span>.</li>
+<li>Vector clocks detect concurrent versions.</li>
+<li><em>Hinted handoff</em>, <em>read repair</em>, and Merkle trees help repair replicas.</li>
+</ul>
+<p>The condition <span class="math inline">\(R+W&gt;N\)</span> promotes quorum overlap, but it does not by itself make every operation linearizable.</p>
+</section>
+<section id="where-do-these-ideas-appear" class="slide level1">
+<h1>Where do these ideas appear?</h1>
+<ul>
+<li><strong>Amazon Dynamo:</strong> consistent-hash partitioning and leaderless replication <span class="citation" data-cites="decandia2007dynamo">(<a href="#/referencias" role="doc-biblioref" onclick="">DeCandia et&nbsp;al. 2007</a>)</span>.</li>
+<li><strong>Apache Cassandra:</strong> partitions data by <em>tokens</em> on a ring and replicates token ranges.</li>
+<li><strong>Apache HBase:</strong> follows Bigtable’s ordered model and partitions tables into contiguous row-key ranges called <em>regions</em>. RegionServers host those regions, while <code>hbase:meta</code> maps each range to its current server <span class="citation" data-cites="chang2006bigtable">(<a href="#/referencias" role="doc-biblioref" onclick="">Chang et&nbsp;al. 2006</a>)</span>.</li>
+<li><strong>P2P systems:</strong> Chord and CAN locate resources without a global directory.</li>
+</ul>
+</section>
+<section id="cassandra-example" class="slide level1">
+<h1>Cassandra: example</h1>
+<p>The table is designed around the query: “reviews for one author, ordered by year.”</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource sql number-lines code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href=""></a><span class="kw">CREATE</span> KEYSPACE books</span>
+<span id="cb4-2"><a href=""></a><span class="kw">WITH</span> replication <span class="op">=</span> {</span>
+<span id="cb4-3"><a href=""></a>  <span class="st">'class'</span>: <span class="st">'NetworkTopologyStrategy'</span>,</span>
+<span id="cb4-4"><a href=""></a>  <span class="st">'datacenter1'</span>: <span class="dv">3</span></span>
+<span id="cb4-5"><a href=""></a>};</span>
+<span id="cb4-6"><a href=""></a></span>
+<span id="cb4-7"><a href=""></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> books.reviews_by_author (</span>
+<span id="cb4-8"><a href=""></a>  author_id   text,</span>
+<span id="cb4-9"><a href=""></a>  review_year <span class="dt">int</span>,</span>
+<span id="cb4-10"><a href=""></a>  review_id   uuid,</span>
+<span id="cb4-11"><a href=""></a>  reviewer_id text,</span>
+<span id="cb4-12"><a href=""></a>  rating      tinyint,</span>
+<span id="cb4-13"><a href=""></a>  <span class="kw">PRIMARY</span> <span class="kw">KEY</span> ((author_id), review_year, review_id)</span>
+<span id="cb4-14"><a href=""></a>) <span class="kw">WITH</span> CLUSTERING <span class="kw">ORDER</span> <span class="kw">BY</span> (review_year <span class="kw">DESC</span>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource sql number-lines code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href=""></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> books.reviews_by_author</span>
+<span id="cb5-2"><a href=""></a><span class="kw">WHERE</span> author_id <span class="op">=</span> <span class="st">'author-42'</span></span>
+<span id="cb5-3"><a href=""></a>  <span class="kw">AND</span> review_year <span class="op">&gt;=</span> <span class="dv">2025</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>author_id</code> selects one partition; <code>review_year</code> and <code>review_id</code> order rows inside it. Cassandra does not perform a cluster-wide scan for this query.</p>
+</section>
+<section id="cassandra-main-concepts" class="slide level1">
+<h1>Cassandra: main concepts</h1>
+<p>Apache Cassandra combines ideas from Dynamo’s partitioning and replication with Bigtable’s sorted data model <span class="citation" data-cites="lakshman2010cassandra">(<a href="#/referencias" role="doc-biblioref" onclick="">Lakshman y Malik 2010</a>)</span>.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Data model</strong></p>
+<ul>
+<li>The <strong>partition key</strong> is hashed to a token; the token determines which nodes own the partition.</li>
+<li><strong>Clustering columns</strong> sort rows within that partition and support efficient range scans there.</li>
+<li>A table is designed for its queries: filtering without the required key usually needs another table.</li>
+<li>A partition should remain bounded; one very popular key can create a hot or oversized partition.</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Distributed storage</strong></p>
+<ul>
+<li>A cluster is leaderless; nodes own multiple token ranges through <em>virtual nodes</em>.</li>
+<li>The <strong>replication factor</strong> specifies how many nodes store each partition.</li>
+<li>The <strong>consistency level</strong> (<code>ONE</code>, <code>QUORUM</code>, <code>ALL</code>, etc.) specifies how many replicas must acknowledge an operation.</li>
+<li>Writes go to a commit log and a memtable, then to immutable SSTables; compaction merges SSTables.</li>
+<li><em>Gossip</em> and topology information track membership and replica placement.</li>
+</ul>
+</div></div>
+</section>
+<section id="hbase-example" class="slide level1">
+<h1>HBase: Example</h1>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href=""></a><span class="im">import</span> happybase</span>
+<span id="cb6-2"><a href=""></a></span>
+<span id="cb6-3"><a href=""></a>connection <span class="op">=</span> happybase.Connection(<span class="st">'127.0.0.1'</span>, <span class="dv">55003</span>)  <span class="co"># Thrift port</span></span>
+<span id="cb6-4"><a href=""></a>connection.create_table(<span class="st">'table-name'</span>, {<span class="st">'family'</span>: <span class="bu">dict</span>()})</span>
+<span id="cb6-5"><a href=""></a>connection.tables() </span>
+<span id="cb6-6"><a href=""></a></span>
+<span id="cb6-7"><a href=""></a>table <span class="op">=</span> connection.table(<span class="st">'table-name'</span>)</span>
+<span id="cb6-8"><a href=""></a>table.put(</span>
+<span id="cb6-9"><a href=""></a>    <span class="st">b'row-key'</span>,</span>
+<span id="cb6-10"><a href=""></a>    {<span class="st">b'family:qual1'</span>: <span class="st">b'value1'</span>, <span class="st">b'family:qual2'</span>: <span class="st">b'value2'</span>}</span>
+<span id="cb6-11"><a href=""></a>)</span>
+<span id="cb6-12"><a href=""></a></span>
+<span id="cb6-13"><a href=""></a><span class="cf">for</span> k, data <span class="kw">in</span> table.scan():</span>
+<span id="cb6-14"><a href=""></a>    <span class="bu">print</span>(k,data)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="hbase-main-concepts" class="slide level1">
+<h1>HBase: main concepts</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Logical data model</strong></p>
+<ul>
+<li>The <strong>row key</strong> uniquely identifies a row. Rows are kept in bytewise sorted order.</li>
+<li>A <strong>region</strong> is a contiguous interval of row keys, such as <span class="math inline">\([k_a,k_b]\)</span>. The row key therefore determines the region that stores the row.</li>
+<li>A <strong>column family</strong> is declared when the table is created. It defines a physical storage and configuration unit.</li>
+<li>A <strong>qualifier</strong> names a column inside a family and may be created dynamically.</li>
+</ul>
+<p>The family does <strong>not</strong> select the RegionServer: all families of a row belong to the same region.</p>
+</div><div class="column" style="width:50%;">
+<p><strong>Physical lookup</strong></p>
+<ol type="1">
+<li>The client finds the region whose interval contains the row key.</li>
+<li><code>hbase:meta</code> maps that region to its current <strong>RegionServer</strong>.</li>
+<li>The RegionServer executes the read or write. Inside the region, each family has a separate <em>Store</em>.</li>
+<li>The client caches this mapping; after a region split or move, it consults <code>hbase:meta</code> again.</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1"><a href=""></a>row key → region → hbase:meta → RegionServer</span>
+<span id="cb7-2"><a href=""></a>                         └────→ Store per family</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+</section>
+<section id="summary" class="slide level1">
+<h1>Summary</h1>
+<div class="table-small">
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 28%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>System</th>
+<th>Organization</th>
+<th style="text-align: right;">State per node</th>
+<th style="text-align: right;">Typical lookup</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Napster</td>
+<td>Centralized directory</td>
+<td style="text-align: right;">Global at the server</td>
+<td style="text-align: right;"><span class="math inline">\(O(1)\)</span></td>
+</tr>
+<tr class="even">
+<td>Gnutella</td>
+<td>Unstructured graph</td>
+<td style="text-align: right;">Neighbors</td>
+<td style="text-align: right;">Unbounded; limited by TTL</td>
+</tr>
+<tr class="odd">
+<td>CAN</td>
+<td><span class="math inline">\(d\)</span>-dimensional space</td>
+<td style="text-align: right;"><span class="math inline">\(O(d)\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(O(dN^{1/d})\)</span></td>
+</tr>
+<tr class="even">
+<td>Chord</td>
+<td>Ring + <em>fingers</em></td>
+<td style="text-align: right;"><span class="math inline">\(O(\log N)\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(O(\log N)\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>These asymptotic costs describe the overlay. In production, physical latency, heterogeneous nodes, hot data, churn, and rebalancing costs also matter.</p>
+</section>
+<section id="activity-from-hash-to-node" class="slide level1 activity">
+<h1>Activity: from hash to node</h1>
+<p>In the Chord ring shown in the figure, with <span class="math inline">\(m=6\)</span>:</p>
+<ol type="1">
+<li>Which node stores keys 0, 19, 37, 42, 52, and 63?</li>
+<li>Node <span class="math inline">\(n_{42}\)</span> joins. Which interval becomes its responsibility?</li>
+<li>From which node are those keys transferred?</li>
+<li>If the replication factor is 3, on which nodes would you place the replicas of key 37?</li>
+<li>What changes if all keys between 30 and 45 must be queried?</li>
+</ol>
+<p>In each answer, distinguish between <strong>partitioning</strong>, <strong>routing</strong>, and <strong>replication</strong>.</p>
+</section>
+<section id="activity" class="slide level1 activity">
+<h1>Activity</h1>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href=""></a><span class="ex">U10-HashTables</span></span>
+<span id="cb8-2"><a href=""></a><span class="ex">├──</span> Cassandra</span>
+<span id="cb8-3"><a href=""></a><span class="ex">│</span>   ├── docker-compose.yml</span>
+<span id="cb8-4"><a href=""></a><span class="ex">│</span>   └── steps.md</span>
+<span id="cb8-5"><a href=""></a><span class="ex">└──</span> Hbase</span>
+<span id="cb8-6"><a href=""></a>    <span class="ex">└──</span> steps.md</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="referencias" class="slide level1 allowframebreaks smaller scrollable">
+<h1>Referencias</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-chang2006bigtable" class="csl-entry" role="listitem">
+Chang, Fay, Jeffrey Dean, Sanjay Ghemawat, et&nbsp;al. 2006. <span>«Bigtable: A Distributed Storage System for Structured Data»</span>. <em>Proceedings of the 7th USENIX Symposium on Operating Systems Design and Implementation</em>, 205-18.
+</div>
+<div id="ref-decandia2007dynamo" class="csl-entry" role="listitem">
+DeCandia, Giuseppe, Deniz Hastorun, Madan Jampani, et&nbsp;al. 2007. <span>«Dynamo: <span>Amazon</span>’s Highly Available Key-Value Store»</span>. <em>Proceedings of Twenty-First ACM SIGOPS Symposium on Operating Systems Principles</em>, 205-20. <a href="https://doi.org/10.1145/1294261.1294281">https://doi.org/10.1145/1294261.1294281</a>.
+</div>
+<div id="ref-karger1997consistent" class="csl-entry" role="listitem">
+Karger, David, Eric Lehman, Tom Leighton, Rina Panigrahy, Matthew Levine, y Daniel Lewin. 1997. <span>«Consistent Hashing and Random Trees: Distributed Caching Protocols for Relieving Hot Spots on the <span>World Wide Web</span>»</span>. <em>Proceedings of the Twenty-Ninth Annual ACM Symposium on Theory of Computing</em>, 654-63. <a href="https://doi.org/10.1145/258533.258660">https://doi.org/10.1145/258533.258660</a>.
+</div>
+<div id="ref-lakshman2010cassandra" class="csl-entry" role="listitem">
+Lakshman, Avinash, y Prashant Malik. 2010. <span>«Cassandra: A Decentralized Structured Storage System»</span>. <em>ACM SIGOPS Operating Systems Review</em> 44 (2): 35-40. <a href="https://doi.org/10.1145/1773912.1773922">https://doi.org/10.1145/1773912.1773922</a>.
+</div>
+<div id="ref-ratnasamy2001can" class="csl-entry" role="listitem">
+Ratnasamy, Sylvia, Paul Francis, Mark Handley, Richard Karp, y Scott Shenker. 2001. <span>«A Scalable Content-Addressable Network»</span>. <em>Proceedings of the 2001 Conference on Applications, Technologies, Architectures, and Protocols for Computer Communications</em>, 161-72. <a href="https://doi.org/10.1145/383059.383072">https://doi.org/10.1145/383059.383072</a>.
+</div>
+<div id="ref-ripeanu2001gnutella" class="csl-entry" role="listitem">
+Ripeanu, Matei. 2001. <span>«Peer-to-Peer Architecture Case Study: <span>Gnutella</span> Network»</span>. <em>Proceedings First International Conference on Peer-to-Peer Computing</em>, 99-100. <a href="https://doi.org/10.1109/P2P.2001.990433">https://doi.org/10.1109/P2P.2001.990433</a>.
+</div>
+<div id="ref-stoica2001chord" class="csl-entry" role="listitem">
+Stoica, Ion, Robert Morris, David Karger, M. Frans Kaashoek, y Hari Balakrishnan. 2001. <span>«Chord: A Scalable Peer-to-peer Lookup Service for <span>Internet</span> Applications»</span>. <em>Proceedings of the 2001 Conference on Applications, Technologies, Architectures, and Protocols for Computer Communications</em>, 149-60. <a href="https://doi.org/10.1145/383059.383071">https://doi.org/10.1145/383059.383071</a>.
+</div>
+</div>
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="tema-11-HashTables_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="tema-11-HashTables_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="tema-11-HashTables_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="tema-11-HashTables_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="tema-11-HashTables_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="tema-11-HashTables_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="tema-11-HashTables_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="tema-11-HashTables_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="tema-11-HashTables_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="tema-11-HashTables_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': false,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1600,
+
+        height: 900,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 1.0e-2,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script>
+    (() => {
+      const AI_MODE_URL = "https://www.google.com/aimode";
+      const TOAST_ID = "ai-mode-toast";
+
+      function findTrigger(target) {
+        return target.closest(".ai-mode-button");
+      }
+
+      function normalizeTriggers() {
+        document.querySelectorAll("a.ai-mode-button[href]").forEach((anchor) => {
+          anchor.removeAttribute("href");
+        });
+      }
+
+      function platformPasteShortcut() {
+        const platform = navigator.userAgentData?.platform || navigator.platform || "";
+        return /mac|iphone|ipad/i.test(platform) ? "Cmd+V" : "Ctrl+V";
+      }
+
+      function readPrompt(button) {
+        const attributePrompt = button.getAttribute("data-ai-prompt");
+        if (attributePrompt && attributePrompt.trim()) {
+          return attributePrompt.trim();
+        }
+
+        const container = button.closest(".ai-mode-launcher");
+        if (!container) {
+          return "";
+        }
+
+        const promptNode = container.querySelector(
+          "template.ai-mode-prompt, script.ai-mode-prompt[type='text/plain'], textarea.ai-mode-prompt"
+        );
+
+        if (!promptNode) {
+          return "";
+        }
+
+        if (promptNode.tagName === "TEMPLATE" && promptNode.content) {
+          return (promptNode.content.textContent || "").trim();
+        }
+
+        if ("value" in promptNode) {
+          return promptNode.value.trim();
+        }
+
+        return (promptNode.textContent || promptNode.innerHTML || "").trim();
+      }
+
+      function showToast(message, isError = false) {
+        let toast = document.getElementById(TOAST_ID);
+
+        if (!toast) {
+          toast = document.createElement("div");
+          toast.id = TOAST_ID;
+          toast.className = "ai-mode-toast";
+          document.body.appendChild(toast);
+        }
+
+        toast.textContent = message;
+        toast.dataset.state = isError ? "error" : "ok";
+        toast.classList.add("is-visible");
+
+        window.clearTimeout(showToast.timeoutId);
+        showToast.timeoutId = window.setTimeout(() => {
+          toast.classList.remove("is-visible");
+        }, 4200);
+      }
+
+      async function launchAiMode(button) {
+        const prompt = readPrompt(button);
+        if (!prompt) {
+          showToast("Este botón no tiene ningún prompt asociado.", true);
+          return;
+        }
+
+        const popup = window.open(AI_MODE_URL, "_blank", "noopener,noreferrer");
+        let copied = false;
+
+        try {
+          await navigator.clipboard.writeText(prompt);
+          copied = true;
+        } catch (error) {
+          copied = false;
+        }
+
+        if (popup) {
+          popup.focus();
+        }
+
+        if (copied) {
+          showToast(
+            `Google AI Mode abierto. El prompt ya está en el portapapeles: pega con ${platformPasteShortcut()}.`
+          );
+          return;
+        }
+
+        showToast(
+          `Google AI Mode abierto, pero el navegador no permitió copiar el prompt. Se mostrará para copiarlo manualmente.`,
+          true
+        );
+        window.prompt("Copia este prompt y pégalo en Google AI Mode:", prompt);
+      }
+
+      function handleActivation(event) {
+        const button = findTrigger(event.target);
+        if (!button) {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        launchAiMode(button);
+      }
+
+      document.addEventListener("click", handleActivation, true);
+
+      document.addEventListener(
+        "keydown",
+        (event) => {
+          const button = findTrigger(event.target);
+          if (!button) {
+            return;
+          }
+
+          if (event.key !== "Enter" && event.key !== " ") {
+            return;
+          }
+
+          handleActivation(event);
+        },
+        true
+      );
+
+      normalizeTriggers();
+    })();
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copiado");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copiado");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
